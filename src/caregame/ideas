@@ -1,0 +1,43 @@
+5x5 squares
+need to care about these fields
+
+each field must be watered, fertilized enough to keep
+health level good
+
+goal is to keep them healthy until they grow fully.
+
+
+
+start out with one seed.
+plant it onto one square.
+Watering and fertilizing it one time to start growing.
+A water tear symbolizes that the crop needs water,
+a green tear symbolizes that it needs to be fertilized.
+
+
+
+GFX
+
+Progress graphics for crops that grow
+Watered and dry farmland
+Deep and shallow water
+Tree
+Crops
+Plants
+Wood / Tree Logs
+maybe: (Wood Planks)
+Semi filled Waterdrops, indicating fertilization/watering
+Grass Flowers (little ones)
+Resources:
+    ironore
+    ironbar
+    boulder
+    rock
+    copperore
+    copperbar
+    garn
+    wolle
+    stoff
+    stoffballen
+    leinen
+    
