@@ -54,6 +54,7 @@ public class InputHandler implements KeyListener {
     // text input
     public Key enter = new Key();
     public Key space = new Key();
+    public Key backspace = new Key();
     public Key []abc;
     public Key []ABC;
     public boolean textInputActive = false;
@@ -95,23 +96,30 @@ public class InputHandler implements KeyListener {
     }
     
     private void toggle(KeyEvent ke, boolean pressed) {
-        if (textInputActive) {
+        if (ke.getKeyCode() == KeyEvent.VK_F3 && pressed) Game.DEBUG = !Game.DEBUG;
+        if (!textInputActive) {
             if (ke.getKeyCode() == KeyEvent.VK_LEFT) left.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_RIGHT) right.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_UP) up.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_DOWN) down.toggle(pressed);
+            if (ke.getKeyCode() == KeyEvent.VK_A) left.toggle(pressed);
+            if (ke.getKeyCode() == KeyEvent.VK_D) right.toggle(pressed);
+            if (ke.getKeyCode() == KeyEvent.VK_W) up.toggle(pressed);
+            if (ke.getKeyCode() == KeyEvent.VK_S) down.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_SPACE) attack.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_E) menu.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_C) crafting.toggle(pressed);
         } else {
             if (ke.getKeyCode() == KeyEvent.VK_ENTER) enter.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_SPACE) space.toggle(pressed);
+            if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE) backspace.toggle(pressed);
             int kc = ke.getKeyCode();
             if (kc >= KeyEvent.VK_A && kc <= KeyEvent.VK_Z) {
+//                System.out.println("" + kc + ", " + ke.getKeyChar() + " = " + (int) ke.getKeyChar());
                 if (ke.isShiftDown()) {
-                    ABC[kc - 'A'].toggle(pressed);
+                    ABC[ke.getKeyChar() - 'A'].toggle(pressed);
                 } else {
-                    abc[kc - 'a'].toggle(pressed);
+                    abc[ke.getKeyChar() - 'a'].toggle(pressed);
                 }
             }
         }
@@ -126,5 +134,4 @@ public class InputHandler implements KeyListener {
         if (ch >= 'A' && ch <= 'Z') return ABC[ch - 'A'];
         return null;
     }
-    
 }

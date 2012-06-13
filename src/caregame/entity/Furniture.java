@@ -4,7 +4,9 @@
  */
 package caregame.entity;
 
+import caregame.Game;
 import caregame.ImageCache;
+import caregame.Sprite;
 import caregame.item.FurnitureItem;
 import java.awt.Graphics;
 import java.io.DataInputStream;
@@ -57,10 +59,13 @@ public class Furniture extends Entity{
 
     @Override
     public void render(Graphics g) {
-        ImageCache.get().get(sprite).render(g, x-xr, y-yr);
-        g.drawRect(x-xr, y-yr, xr+xr, yr+yr);
-        g.drawLine(x-xr, y-yr, x + xr, y + yr);
-        g.drawLine(x-xr,y+yr,x+xr,y-yr);
+        Sprite s = ImageCache.get().get(sprite);
+        s.render(g, x-xr, y+yr-s.getHeight());
+        if (Game.DEBUG) {
+            g.drawRect(x-xr, y-yr, xr+xr, yr+yr);
+            g.drawLine(x-xr, y-yr, x + xr, y + yr);
+            g.drawLine(x-xr,y+yr,x+xr,y-yr);
+        }
     }
 
     

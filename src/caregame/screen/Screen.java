@@ -64,7 +64,7 @@ public class Screen {
         
         renderFrame(g, frameX, frameY, frameWidth, limit-offset);
         int ox = frameX + 11 + Font.getWidth("> ");
-        Font.render(g, offset + "/"+limit+"/"+list.size(), 0, 0);
+//        Font.render(g, offset + "/"+limit+"/"+list.size(), 0, 0);
         for (int i = offset; i < limit; i++) {
             int ww = list.get(i).getWidth();
             int x = ox;

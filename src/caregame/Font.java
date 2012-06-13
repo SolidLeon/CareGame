@@ -13,7 +13,7 @@ import java.awt.Graphics;
 public class Font {
     private static String[] charset = {
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ      ",
-        "0123456789.,!?'\"-+=/\\%()<>:;    "
+        "0123456789.,!?'\"-+=/\\%()<>:;_   "
     };
     public static void render(Graphics g, String text, int x, int y) {
         text = text.toUpperCase();

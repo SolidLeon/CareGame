@@ -40,7 +40,7 @@ public class Player extends Creature {
     public Player(Game game, InputHandler input) {
         this.game = game;
         this.input = input;
-        xr = 16;
+        xr = 14;
         yr = 8;
         //xr = 24;
         //yr = 24;
@@ -84,9 +84,11 @@ public class Player extends Creature {
         //center x,y point where the "step" happens (tiles)
 //        g.fillRect(x, y, 1, 1);
         //draw hitbox
-        g.drawRect(x-xr, y-yr, xr+xr, yr+yr);
-        g.drawLine(x-xr, y-yr, x + xr, y + yr);
-        g.drawLine(x-xr,y+yr,x+xr,y-yr);
+        if (Game.DEBUG) {
+            g.drawRect(x-xr, y-yr, xr+xr, yr+yr);
+            g.drawLine(x-xr, y-yr, x + xr, y + yr);
+            g.drawLine(x-xr,y+yr,x+xr,y-yr);
+        }
 //        g.fillRect(x,y,1,1);
 //        g.drawLine(x,y,x+xr+8,y);
         if (attackTime > 0) {

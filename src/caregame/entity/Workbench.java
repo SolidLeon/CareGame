@@ -24,8 +24,8 @@ public class Workbench extends Furniture{
     public Workbench() {
         super("Workbench");
         sprite = "workbench.png";
-//        xr = 3;
-//        yr = 2;
+        xr = 16;
+        yr = 8;
     }
 
     

@@ -54,6 +54,9 @@ public class Tile {
     }
     
     protected boolean isWatered(GameField field, int xt, int yt) {
+        if (field.weather.isRaining()) {
+            return true;
+        }
         for (int y = yt - 1; y <= yt + 1; y++) {
             for (int x = xt - 1; x <= xt + 1; x++) {
                 Tile t = field.getTile(x,y);

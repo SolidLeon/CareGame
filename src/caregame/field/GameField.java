@@ -5,16 +5,11 @@
 package caregame.field;
 
 import caregame.Game;
-import caregame.ImageCache;
-import caregame.Inventory;
 import caregame.entity.Entity;
 import caregame.entity.Player;
+import caregame.field.biome.Biome;
 import caregame.field.fieldgen.FieldGen;
-import caregame.item.Item;
-import caregame.item.ResourceItem;
-import caregame.item.resource.PlantableResource;
-import caregame.item.resource.Resource;
-import java.awt.Graphics;
+import caregame.weather.Weather;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -28,6 +23,7 @@ public class GameField {
     public int height = 256;
     public byte[] field;
     public byte[] data;
+    public byte[] light;
     private Random random = new Random();
     
     public Player player;
@@ -35,16 +31,37 @@ public class GameField {
     public List<Entity> entities = new ArrayList<Entity>();
     public List<Entity>[] entitiesInTiles;
     public int level;
+    public Biome biome;
+    public Weather weather = Weather.sunny;
     
-    public GameField(int level) {
+    /**
+     * game time in seconds (so each 60ticks, +1)
+     * one day takes 16 minutes, so 8 minutes day, 8 minutes night
+     * as we have 16 light levels, we run through them as the day passes
+     * 
+     * night                day              night
+     * 0 1 2 3 4  5  6  7  8 | 9 10 11 12 13 14 15
+     * 
+     */
+    public int gameTime = 0;
+    private int ticks = 0;
+    private byte []ll = { 0, 2, 4, 6, 8, 12, 14, 15, 14, 12, 8, 6, 4, 2, 0 };
+    
+    public GameField(Biome biome, int level) {
+        this.biome = biome;
         this.level = level;
-        byte [][]map = FieldGen.generateField(width, height, level);
+        byte [][]map = FieldGen.generateField(width, height, level, biome);
         field = map[0];
         data = map[1];
+        light = new byte[width*height];
         entitiesInTiles = new ArrayList[width*height];
         for (int i = 0; i < entitiesInTiles.length; i++) {
             entitiesInTiles[i] = new ArrayList<Entity>();
         }
+    }
+    
+    public int getLightLevel(int xt, int yt) {
+        return light[xt + yt * width];
     }
 
     public void add(Entity e) {
@@ -94,8 +111,17 @@ public class GameField {
         if (x < 0 || y < 0 || x >= width ||y >= height) return;
         data[x+y*width] = (byte) dataValue;
     }
+    public void setLightLevel(int xt, int yt, int ll) {
+        light[xt+yt*width] = (byte) ll;
+    }
 
     public void tick() {
+        ticks++;
+        if (ticks % 60 == 0) gameTime++;
+        if (gameTime > 8*60) gameTime = 0;
+        int tm = (gameTime/60);
+        for (int i = 0; i < light.length; i++) light[i] = ll[tm]; //set to daytime depending value
+        
         for (int i = 0; i < width * height / 50; i++) {
             int xt = random.nextInt(width);
             int yt = random.nextInt(height);
@@ -119,6 +145,7 @@ public class GameField {
                 }
             }
         }
+        
     }
     
     public List<Entity> getEntities(int x0, int y0, int x1, int y1) {

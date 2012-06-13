@@ -5,6 +5,7 @@
 package caregame.field.fieldgen;
 
 import caregame.field.Tile;
+import caregame.field.biome.Biome;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -23,7 +24,7 @@ public class FieldGen extends Canvas implements Runnable, KeyListener {
     private static PerlinNoise pn = new PerlinNoise(0x1000, 0);
     private static Random random = new Random(0);
     
-    public static byte[][] generateField(int sx, int sy, int level) {
+    public static byte[][] generateField(int sx, int sy, int level, Biome biome) {
         byte []map = new byte[sx*sy];
         byte []data = new byte[sx*sy];
         for (int y = 0; y < sy; y++) {

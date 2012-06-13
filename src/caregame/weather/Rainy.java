@@ -14,15 +14,14 @@ public class Rainy extends Weather {
         super(id);
     }
 
-    
-    
     @Override
-    public float getRainAmount() {
-        return 0.05f;
-    }
-    @Override
-    public String toString() {
+    public String getName() {
         return "RAINY";
+    }
+
+    @Override
+    public boolean isRaining() {
+        return true;
     }
     
     

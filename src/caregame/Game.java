@@ -7,6 +7,7 @@ package caregame;
 import caregame.entity.Entity;
 import caregame.entity.Player;
 import caregame.field.GameField;
+import caregame.field.biome.Biome;
 import caregame.item.*;
 import caregame.item.resource.Resource;
 import caregame.screen.LevelTransitionScreen;
@@ -34,6 +35,8 @@ public class Game extends Canvas implements Runnable {
     public static final int WIDTH = 640;
     public static final int HEIGHT = 480;
     public static final String TITLE = "Care Game";
+    
+    public static boolean DEBUG = false;
     
     public static void main(String []args) {
         Game game = new Game();
@@ -70,6 +73,7 @@ public class Game extends Canvas implements Runnable {
     public Texturepack texturepack;
     
     private int ticks, fps;
+    private int ticks2, fps2;
 
     private boolean stopKeyRepeat = false;
     private int lastRepeatKey;
@@ -82,6 +86,14 @@ public class Game extends Canvas implements Runnable {
     
     private int currentLevel;
     private int pendingLevelChange;
+    
+    private Color[] lightLevels = new Color[16];
+    
+    public Game() {
+        for (int i = 0; i < 16; i++) {
+            lightLevels[i] = new Color(0, 0, 0, 15*i);
+        }
+    }
     
     public void setTexturepack(Texturepack texturepack) {
         this.texturepack = texturepack;
@@ -114,23 +126,26 @@ public class Game extends Canvas implements Runnable {
     }
     
     public void startNewGame(String worldName) {
+        startNewGame(worldName, false);
+    }
+    public void startNewGame(String worldName, boolean cheatMode) {
         this.worldName = worldName;
         currentLevel = 255;
         fields = new GameField[256];
-        fields[255] = new GameField(255);
+        fields[255] = new GameField(Biome.forest, 255);
         field = fields[255];
-//        cx = 0;
-//        cy = 0;
-//        selectedItem = null;
+        
         weather = Weather.getRandomWeather();
         canResume = false;
         player = new Player(this, input);
-        player.inventory.add(new ToolItem(ToolType.hoe, 0));
-        player.inventory.add(new ToolItem(ToolType.shovel, 0));
-        player.inventory.add(new ToolItem(ToolType.axe, 0));
-        player.inventory.add(new ResourceItem(Resource.wood, 999));
-        player.inventory.add(new ResourceItem(Resource.wheatSeeds, 999));
-        player.inventory.add(new WaterCan(0));
+        if (cheatMode) {
+            player.inventory.add(new ToolItem(ToolType.hoe, 0));
+            player.inventory.add(new ToolItem(ToolType.shovel, 0));
+            player.inventory.add(new ToolItem(ToolType.axe, 0));
+            player.inventory.add(new ResourceItem(Resource.wood, 999));
+            player.inventory.add(new ResourceItem(Resource.wheatSeeds, 999));
+            player.inventory.add(new WaterCan(0));
+        }
         player.findStartPos(field);
         field.add(player);
         setScreen(null);
@@ -169,6 +184,8 @@ public class Game extends Canvas implements Runnable {
             if (System.currentTimeMillis() - lastTime1 > 1000) {
                 lastTime1 += 1000;
                 System.out.println(ticks + " ticks, " + fps + " fps");
+                ticks2 = ticks;
+                fps2 = fps;
                 ticks = 0;
                 fps = 0;
             }
@@ -259,7 +276,7 @@ public class Game extends Canvas implements Runnable {
                     }
                     rowSprites.clear();
                 }
-                
+                renderLight(g, xt0, yt0, xt1, yt1);
                 g.translate(xScroll, yScroll);
                 
             }
@@ -276,6 +293,13 @@ public class Game extends Canvas implements Runnable {
         
 //        g.translate(-xx, -yy);
         
+        if (Game.DEBUG) {
+            Font.render(g, "T: " + ticks2 + ", F:" + fps2, 5, 5);
+            Font.render(g, "W: " + weather.getName(), 5, 5+8);
+            if (player != null)
+                Font.render(g, "P: " + player.x + "/" + player.y, 5, 5+8*2);
+        }
+        
         g.dispose();
         bs.show();
     }
@@ -283,12 +307,23 @@ public class Game extends Canvas implements Runnable {
     private void renderGui(Graphics g) {
     }
 
+    private void renderLight(Graphics g, int x0, int y0, int x1, int y1) {
+        Color old = g.getColor();
+        g.setColor(new Color(0, 0, 0, 100));
+        for (int y = y0; y <= y1; y++) {
+            for (int x = x0; x <= x1; x++) {
+                g.fillRect(x*32, y*32, 32, 32);
+            }
+        }
+        g.setColor(old);
+    }
+    
     public void changeLevel(int dir) {
         field.remove(player);
         currentLevel += dir;
         field = fields[currentLevel];
         if (field == null) {
-            fields[currentLevel] = new GameField(currentLevel);
+            fields[currentLevel] = new GameField(Biome.forest, currentLevel);
             field = fields[currentLevel];
         }
         player.x = (player.x >> 5) * 32 + 16;

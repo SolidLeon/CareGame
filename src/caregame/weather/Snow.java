@@ -8,17 +8,15 @@ package caregame.weather;
  *
  * @author Markus
  */
-public class Sunny extends Weather {
+public class Snow extends Weather {
 
-    public Sunny(int id) {
+    public Snow(int id) {
         super(id);
     }
+    
 
-    
-    
     @Override
-    public String getName() {
-        return "SUNNY";
+    public boolean isRaining() {
+        return true;
     }
-    
 }

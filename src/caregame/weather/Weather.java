@@ -18,7 +18,7 @@ public class Weather {
     
     public static final Weather sunny = new Sunny(0);
     public static final Weather rainy = new Rainy(1);
-    public static final Weather heavyRain = new HeavyRain(2);
+    public static final Weather snow = new Snow(2);
 
     public static Weather getRandomWeather() {
         return weathers[random.nextInt(weathers.length)];
@@ -30,14 +30,13 @@ public class Weather {
         this.id = (byte) id;
         weathers[id] = this;
     }
-
-    public final boolean isRaining() {
-        return getRainAmount() > 0.0f;
+    
+    public String getName() {
+        return "";
     }
     
-    public float getRainAmount() {
-        return 0.0f;
+    public boolean isRaining() {
+        return false;
     }
-    
     
 }
