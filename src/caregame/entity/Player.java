@@ -37,6 +37,9 @@ public class Player extends Creature {
     private Item attackItem;
     private int onElevatorDelay;
     
+    private int maxHunger = 50;
+    private int hunger = maxHunger;
+    
     public Player(Game game, InputHandler input) {
         this.game = game;
         this.input = input;
@@ -47,8 +50,9 @@ public class Player extends Creature {
     }
     
     public boolean payStamina(int cost) {
-        if (cost > stamina) return false;
+        if (cost > stamina || (cost*2) > hunger) return false;
         stamina -= cost;
+        hunger -= cost * 2;
         return true;
     }
 
@@ -128,11 +132,11 @@ public class Player extends Creature {
         super.tick();
         
         Tile onTile = field.getTile(x>>5, y>>5);
-        if (onTile == Tile.elevatorUpTile || onTile == Tile.elevatorDownTile || onTile == Tile.hole) {
+        if (onTile == Tile.elevatorUpTile || onTile == Tile.elevatorDownTile) {
             if (onElevatorDelay == 0) {
                 int d = 0;
                 if (onTile == Tile.elevatorUpTile) d = 1;
-                if (onTile == Tile.elevatorDownTile || onTile == Tile.hole) d = -1;
+                if (onTile == Tile.elevatorDownTile) d = -1;
                 changeLevel(d);
                 onElevatorDelay = 10;
                 return;
@@ -321,6 +325,5 @@ public class Player extends Creature {
             e.touchedBy(this);
         }
     }
-    
     
 }

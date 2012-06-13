@@ -100,7 +100,7 @@ public class TreeTile extends Tile {
         int damage = field.getData(xt, yt) + dmg;
         field.add(new SmashParticle(xt*32 + 16, yt*32 + 16));
         field.add(new TextParticle(Integer.toString(dmg), xt*32 + 16, yt*32 + 16));
-        if (damage >= 40) {
+        if (damage >= 25) {
             int count = random.nextInt(2) + 1;
             for (int i = 0; i < count; i++) {
                 field.add(new ItemEntity(new ResourceItem(Resource.wood), xt * 32 + random.nextInt(10) + 3, yt * 32 + random.nextInt(10) + 3));
