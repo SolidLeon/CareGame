@@ -34,18 +34,6 @@ public class GameField {
     public Biome biome;
     public Weather weather = Weather.sunny;
     
-    /**
-     * game time in seconds (so each 60ticks, +1)
-     * one day takes 16 minutes, so 8 minutes day, 8 minutes night
-     * as we have 16 light levels, we run through them as the day passes
-     * 
-     * night                day              night
-     * 0 1 2 3 4  5  6  7  8 | 9 10 11 12 13 14 15
-     * 
-     */
-    public int gameTime = 0;
-    private int ticks = 0;
-    private byte []ll = { 0, 2, 4, 6, 8, 12, 14, 15, 14, 12, 8, 6, 4, 2, 0 };
     
     public GameField(Biome biome, int level) {
         this.biome = biome;
@@ -114,13 +102,13 @@ public class GameField {
     public void setLightLevel(int xt, int yt, int ll) {
         light[xt+yt*width] = (byte) ll;
     }
-
+    
     public void tick() {
-        ticks++;
-        if (ticks % 60 == 0) gameTime++;
-        if (gameTime > 8*60) gameTime = 0;
-        int tm = (gameTime/60);
-        for (int i = 0; i < light.length; i++) light[i] = ll[tm]; //set to daytime depending value
+//        ticks++;
+//        if (ticks % 60 == 0) gameTime++;
+//        if (gameTime > 8*60) gameTime = 0;
+//        int tm = (gameTime/60);
+//        for (int i = 0; i < light.length; i++) light[i] = ll[tm]; //set to daytime depending value
         
         for (int i = 0; i < width * height / 50; i++) {
             int xt = random.nextInt(width);
