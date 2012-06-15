@@ -32,15 +32,11 @@ public class SeedTile extends Tile {
         this.growsTo = growsTo;
     }
     
-    private boolean isWatered(GameField field, int xt, int yt) {
-        return ((field.getData(xt, yt)>>4)&0xf) == 8;
-    }
-    
     
     @Override
     public void tick(GameField field, int xt, int yt) {
         int growth = 60;
-        if (isWatered(field, xt, yt)) {
+        if (isWaterAround(field, xt, yt)) {
             growth = 90;
         } else {
             if (random.nextInt(100) == 0) {
@@ -60,7 +56,7 @@ public class SeedTile extends Tile {
     @Override
     public void render(Graphics g, GameField field, int xt, int yt) {
         growsOn.render(g, field, xt, yt);
-        int age = field.getData(xt, yt)&0x7;
+        int age = field.getData(xt, yt);
         if (age == 0) ImageCache.get().get("phase1.png").render(g, xt*32, yt*32);
         if (age == 1) ImageCache.get().get("phase1.png").render(g, xt*32, yt*32);
         if (age == 2) ImageCache.get().get("phase2.png").render(g, xt*32, yt*32);
