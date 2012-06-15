@@ -26,31 +26,42 @@ public class WheatTile extends Tile {
     }
 
     @Override
+    public int getWetness(GameField field, int xt, int yt) {
+        return ((field.getData(xt, yt)>>4)&0xf);
+    }
+
+    @Override
     public void render(Graphics g, GameField field, int xt, int yt) {
-        int age = field.getData(xt, yt);
-        int progress = age / 10;
+        int age = field.getData(xt, yt)&0x7;
+//        int progress = age / 10;
         
         Tile.farmland.render(g, field, xt, yt);
-        if (progress == 0) {
+        if (age == 0) {
             getSprite("texturen/seeds.png").render(g, xt*32, yt*32);
-        } else if (progress == 1) {
+        } else if (age == 1) {
             getSprite("phase1.png").render(g, xt*32, yt*32);
-        } else if (progress == 2) {
+        } else if (age == 2) {
             getSprite("phase2.png").render(g, xt*32, yt*32);
-        } else if (progress == 3) {
+        } else if (age == 3) {
             getSprite("phase3.png").render(g, xt*32, yt*32);
-        } else if (progress == 4) {
+        } else if (age == 4) {
             getSprite("weizen_phase1.png").render(g, xt*32, yt*32);
-        } else if (progress == 5) {
+        } else if (age == 5) {
             getSprite("weizen_phase2.png").render(g, xt*32, yt*32);
         }
     }
 
     @Override
     public void tick(GameField field, int xt, int yt) {
-        if (random.nextInt(2) == 0) return;
-        int age = field.getData(xt, yt) + 1;
-        if (age <= 50) field.setData(xt, yt, age);
+        int age = (field.getData(xt, yt)&0x7);
+        if (age < 5 && random.nextInt(200) == 0) {
+            age += 1;
+        }
+        int wetness = getWetness(field, xt, yt);
+        if (wetness < 8 && random.nextInt(60) != 0 ) {
+            if (isWaterAround(field, xt, yt)) wetness += 1;
+        }
+        field.setData(xt, yt, (wetness<<4) | age);
     }
 
     

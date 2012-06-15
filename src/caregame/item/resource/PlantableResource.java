@@ -32,7 +32,7 @@ public class PlantableResource extends Resource {
     @Override
     public boolean interactOn(Tile tile, GameField field, int xt, int yt, Player player, int attackDir) {
         if (sourceTiles.contains(tile)){
-            field.setTile(xt, yt, targetTile, 0);
+            field.setTile(xt, yt, targetTile, targetTile.getWetness(field, xt ,yt));
             return true;
         }
         return false;

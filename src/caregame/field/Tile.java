@@ -53,7 +53,7 @@ public class Tile {
         return ImageCache.get().get(ref);
     }
     
-    protected boolean isWatered(GameField field, int xt, int yt) {
+    protected boolean isWaterAround(GameField field, int xt, int yt) {
         if (field.weather.isRaining()) {
             return true;
         }
@@ -101,5 +101,9 @@ public class Tile {
 
     public void hurt(GameField field, int xt, int yt, Creature attacker, int dmg, int dir) {
         
+    }
+
+    public int getWetness(GameField field, int xt, int yt) {
+        return 0;
     }
 }

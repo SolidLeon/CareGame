@@ -85,7 +85,7 @@ public class Entity {
                 }
             }
         }
-        System.out.println(getClass().getSimpleName() + "CD");
+//        System.out.println(getClass().getSimpleName() + "CD");
         
         List<Entity> wasInside = field.getEntities(
                 x - xr, 
