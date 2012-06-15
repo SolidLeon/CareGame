@@ -45,11 +45,11 @@ public class SeedTile extends Tile {
             }
         }
         if (random.nextInt(growth) != 0) return;
-        int age = (field.getData(xt, yt)&0x7) + 1;
+        int age = field.getData(xt, yt) + 1;
         if (age >= 3) { //4th age
             field.setTile(xt, yt, growsTo, 0);
         } else {
-            field.setData(xt, yt, (field.getData(xt, yt)&0xf0) | age);
+            field.setData(xt, yt, age);
         }
     }
     
