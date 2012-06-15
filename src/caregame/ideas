@@ -8,7 +8,10 @@ Update 1
 - Water must FLOW - if you dig a hole tile next to a water tile, the hole tile gets flooded.
 - Tile watering should be slower, and a little bit random, instead of being
   watered instantly as soon as a water/water hole tile is next to it.
+    Technically almost not doable since we have no seperated seed tile where the farmland underneath can be watered.
+    Attempts were made, but failed due to insufficient bits to get a smooth aging AND wetting.
 - Rain should water tiles.
+    WORKS!!!
 
 TODO:
 

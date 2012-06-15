@@ -51,6 +51,7 @@ public class InputHandler implements KeyListener {
     public Key attack = new Key();
     public Key menu = new Key();
     public Key crafting = new Key();
+    public Key drop = new Key();
     // text input
     public Key enter = new Key();
     public Key space = new Key();
@@ -97,18 +98,20 @@ public class InputHandler implements KeyListener {
     
     private void toggle(KeyEvent ke, boolean pressed) {
         if (ke.getKeyCode() == KeyEvent.VK_F3 && pressed) Game.DEBUG = !Game.DEBUG;
+        if (ke.getKeyCode() == KeyEvent.VK_LEFT) left.toggle(pressed);
+        if (ke.getKeyCode() == KeyEvent.VK_RIGHT) right.toggle(pressed);
+        if (ke.getKeyCode() == KeyEvent.VK_UP) up.toggle(pressed);
+        if (ke.getKeyCode() == KeyEvent.VK_DOWN) down.toggle(pressed);
         if (!textInputActive) {
-            if (ke.getKeyCode() == KeyEvent.VK_LEFT) left.toggle(pressed);
-            if (ke.getKeyCode() == KeyEvent.VK_RIGHT) right.toggle(pressed);
-            if (ke.getKeyCode() == KeyEvent.VK_UP) up.toggle(pressed);
-            if (ke.getKeyCode() == KeyEvent.VK_DOWN) down.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_A) left.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_D) right.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_W) up.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_S) down.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_SPACE) attack.toggle(pressed);
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) attack.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_E) menu.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_C) crafting.toggle(pressed);
+            if (ke.getKeyCode() == KeyEvent.VK_Q) drop.toggle(pressed);
         } else {
             if (ke.getKeyCode() == KeyEvent.VK_ENTER) enter.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_SPACE) space.toggle(pressed);

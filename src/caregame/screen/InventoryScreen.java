@@ -4,11 +4,10 @@
  */
 package caregame.screen;
 
-import caregame.*;
+import caregame.entity.ItemEntity;
 import caregame.entity.Player;
-import java.awt.Color;
+import caregame.item.Item;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 
 /**
  *
@@ -22,8 +21,8 @@ public class InventoryScreen extends Screen {
     public InventoryScreen(Player player) {
         this.player = player;
         if (player.activeItem != null) {
-            player.inventory.add(0, player.activeItem);
-            player.activeItem = null;
+            if (player.inventory.add(0, player.activeItem))
+                player.activeItem = null;
         }
     }
     
@@ -53,6 +52,9 @@ public class InventoryScreen extends Screen {
         int len = player.inventory.items.size();
         if (selection < 0) selection += len;
         if (selection >= player.inventory.items.size()) selection -= len;
+        if (input.drop.clicked) {
+            player.drop(player.inventory.items.get(selection));
+        }
     }
     
     

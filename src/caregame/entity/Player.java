@@ -25,7 +25,7 @@ import java.util.List;
 public class Player extends Creature {
 
     public Game game;
-    public Inventory inventory = new Inventory();
+    public Inventory inventory = new Inventory(6);
     public Item activeItem;
     private InputHandler input;
     
@@ -214,6 +214,12 @@ public class Player extends Creature {
         if (input.crafting.clicked) {
             game.setScreen(new CraftingScreen(this, Crafting.freeRecipes));
         }
+        if (input.drop.clicked) {
+            if (activeItem != null) {
+                drop(activeItem);
+                activeItem = null;
+            }
+        }
         if (attackTime > 0) attackTime--;
     }
     
@@ -331,8 +337,8 @@ public class Player extends Creature {
     
     @Override
     public void touchItem(ItemEntity itemEntity) {
-        itemEntity.take(this);
-        inventory.add(itemEntity.item);
+        if (inventory.add(itemEntity.item))
+            itemEntity.take(this);
     }
     
     public void changeLevel(int dir) {
@@ -350,6 +356,13 @@ public class Player extends Creature {
         this.hunger += hungerRegain;
         field.add(new TextParticle("E"+Integer.toString(hungerRegain), x, y));
         if (hunger > maxHunger) hunger = maxHunger;
+    }
+
+    public void drop(Item item) {
+        if (item != null) {
+            inventory.items.remove(item);
+            field.add(new ItemEntity(item, x + random.nextInt(10) + 3, y + random.nextInt(10) + 3));
+        }
     }
     
 }

@@ -22,26 +22,38 @@ public class Inventory {
 //    public int fertilizer;
 //    public int water;
     public List<Item> items = new ArrayList<Item>();
+    public int maxSlots = -1; //-1 = infinity
 
+    public Inventory(int maxSlots) {
+        this.maxSlots = maxSlots;
+    }
     public Inventory() {
     }
 
-    public void add(Item item) {
-        add(items.size(), item);
+    public boolean add(Item item) {
+        return add(items.size(), item);
     }
     
-    public void add(int slot, Item item) {
+    public boolean add(int slot, Item item) {
         if (item instanceof ResourceItem) {
             ResourceItem toTake = (ResourceItem) item;
             ResourceItem has = findResource(toTake.resource);
             if (has == null) {
-                items.add(slot, toTake);
+                if (maxSlots == -1 || items.size() < maxSlots) {
+                    items.add(slot, toTake);
+                    return true;
+                }
             } else {
                 has.count += toTake.count;
+                return true;
             }
         } else {
-            items.add(slot, item);
+            if (maxSlots == -1 || items.size() < maxSlots) {
+                items.add(slot, item);
+                return true;
+            }
         }
+        return false;
     }
 
     private ResourceItem findResource(Resource resource) {
@@ -132,5 +144,13 @@ public class Inventory {
                 add(0, ti);
             }
         }
+    }
+
+    public int remaining() {
+        return maxSlots == -1 ? -1 : maxSlots - items.size();
+    }
+
+    public boolean isInfinite() {
+        return maxSlots == -1;
     }
 }

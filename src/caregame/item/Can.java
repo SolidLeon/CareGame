@@ -26,13 +26,15 @@ public class Can extends ToolItem {
     public boolean interactOn(Tile tile, GameField field, int xt, int yt, Player player, int attackDir) {
         if (tile == Tile.waterHole) {
             field.setTile(xt, yt, Tile.hole, 0);
-            player.inventory.add(0, new WaterCan(level));
-            filled = true;
+            player.activeItem = new WaterCan(level);
+//            player.inventory.add(0, new WaterCan(level));
+//            filled = true; we remove the item already here so no need to let it remove by isDepleted()
             return true;
         }
         if (tile == Tile.water) {
-            player.inventory.add(0, new WaterCan(level));
-            filled = true;
+//            player.inventory.add(0, new WaterCan(level));
+            player.activeItem = new WaterCan(level);
+//            filled = true; we remove the item already here so no need to let it remove by isDepleted()
             return true;
         }
         return false;
@@ -40,7 +42,7 @@ public class Can extends ToolItem {
 
     @Override
     public boolean isDepleted() {
-        return filled;
+        return false;
     }
     
 }

@@ -29,7 +29,7 @@ public class ItemEntity extends Entity {
         ya = random.nextGaussian() * 0.2;
         za = random.nextFloat() * 0.7 + 1;
 
-        lifeTime = 60 * 10 + random.nextInt(60);
+        lifeTime = 120 * 10 + random.nextInt(60);
     }
 
     @Override

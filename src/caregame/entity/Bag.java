@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 public class Bag extends Furniture {
 
-    public Inventory inventory = new Inventory();
+    public Inventory inventory = new Inventory(4);
 
     public Bag() {
         super("Bag");
