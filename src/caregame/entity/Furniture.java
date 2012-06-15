@@ -86,7 +86,7 @@ public class Furniture extends Entity{
     @Override
     public void hurt(Creature c, int dmg, int attackDir) {
         remove();
-        field.add(new ItemEntity(new FurnitureItem(this), x, y));
+        field.add(new ItemEntity(new FurnitureItem(this), x + random.nextInt(10) + 3, y + random.nextInt(10) + 3));
     }
     
 }

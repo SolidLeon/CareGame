@@ -35,12 +35,12 @@ public class Workbench extends Furniture{
         return true;
     }
 
-    @Override
-    public boolean interact(Player player, Item item, int attackDir) {
-        remove();
-        player.inventory.add(new FurnitureItem(this));
-        return true;
-    }
+//    @Override
+//    public boolean interact(Player player, Item item, int attackDir) {
+//        remove();
+//        player.inventory.add(new FurnitureItem(this));
+//        return true;
+//    }
     
     
     
