@@ -26,13 +26,18 @@ public class ToolItem extends Item {
     public static final String[] LEVEL_NAMES = { //
         "Wood", "Rock", "Iron", "Gold", "Gem"//
     };
+    public static final int[] LEVEL_DURABILITY = {
+        10, 20, 40, 80, 160
+    };
     
     public ToolType type;
     public int level = 0;
+    public int durability;
 
     public ToolItem(ToolType type, int level) {
         this.type = type;
         this.level = level;
+        durability = LEVEL_DURABILITY[level];
     }
 
     @Override
@@ -83,6 +88,11 @@ public class ToolItem extends Item {
     @Override
     public boolean canAttack() {
         return true;
+    }
+
+    @Override
+    public boolean isDepleted() {
+        return durability <= 0;
     }
     
     

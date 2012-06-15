@@ -90,7 +90,14 @@ public class TreeTile extends Tile {
                     hurt(field, xt, yt, random.nextInt(10) + (tool.level) * 5 + 10);
                     return true;
                 }
+            } else {
+                if (player.payStamina(4 - tool.level)) {
+                    hurt(field, xt, yt, 1 + (tool.level));
+                    return true;
+                }
+                return true;
             }
+            tool.durability--;
         }
         return false;
     }
