@@ -1,3 +1,80 @@
+Update 1
+
+- Tree saplings 'item' should be something like acorn or other form of sseds, but not the actual TREES!!!
+- Colors are bit gray... grass should look rich green
+- Player needs Animations:
+  * Smash/use
+  * Walk
+- Water must FLOW - if you dig a hole tile next to a water tile, the hole tile gets flooded.
+- Tile watering should be slower, and a little bit random, instead of being
+  watered instantly as soon as a water/water hole tile is next to it.
+- Rain should water tiles.
+
+TODO:
+
+- Inventory capacity
+
+- Equipment support
+    Head
+    (Shoulder)
+    Chest
+    Legs
+    Feet
+
+Content
+- Entities
+  * Cow
+    Steak
+    Milk
+  * Sheep
+    Wool
+  * Pig
+    Porkchop
+  * Wolf
+
+  Furnace
+    Melting ores to get bars
+  Blacksmith
+   Armor, Weapons
+   Metal cans
+  Tailorthings
+    Tailor cloth
+    Bags
+  Fireplace
+    Cooking 
+
+- Sound
+    Steps (grass, dirt, sand, ...)
+    Swimming
+    Attack
+    Use
+    Craft
+    Hurt
+    Rain
+    Thunder
+- AI
+  * Aggressive (wolves etc)
+  * Passive (sheep, cow)
+- Light Support
+  * Daylight (Sun / Moon)
+  * Lightsources, entities and tiles
+  * Different Light colors (sun=bright yellow/white; moon=dark,blue,cold; torch=yellow/red, dark)
+- Level Generator
+  * Biome support
+  * Layer generation
+    Top Layer, grass, sand, snow etc
+    Middle Layer, stone, ores, no light
+    Bottom Layer, No further downward tiles (elevator do not port anymore), no light
+- Biome support
+  * Grass Biome
+    Rain
+  * Desert Biome
+    No rain
+  * Snow Biome
+    Snowfall
+
+----------
+
 5x5 squares
 need to care about these fields
 
