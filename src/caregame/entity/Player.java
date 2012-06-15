@@ -6,6 +6,7 @@ package caregame.entity;
 
 import caregame.*;
 import caregame.crafting.Crafting;
+import caregame.entity.particle.TextParticle;
 import caregame.field.GameField;
 import caregame.field.GrassTile;
 import caregame.field.Tile;
@@ -37,8 +38,10 @@ public class Player extends Creature {
     private Item attackItem;
     private int onElevatorDelay;
     
-    private int maxHunger = 50;
-    private int hunger = maxHunger;
+    public int maxHunger = 50;
+    public int hunger = maxHunger;
+    private int hungerTime;
+    private int hungerDamageTime;
     
     public Player(Game game, InputHandler input) {
         this.game = game;
@@ -50,6 +53,7 @@ public class Player extends Creature {
     }
     
     public boolean payStamina(int cost) {
+        if (cost == 0) return true;
         if (cost > stamina || (cost*2) > hunger) return false;
         stamina -= cost;
         hunger -= cost * 2;
@@ -145,6 +149,22 @@ public class Player extends Creature {
         } else {
             if (onElevatorDelay > 0) onElevatorDelay--;
         }
+        
+        if (hunger == 0 && hungerDamageTime == 0) {
+            hungerDamageTime = 120;
+            health--;
+        }
+        if (hungerDamageTime > 0) hungerDamageTime--;
+        
+        //10HU / 1min
+        // 10 HU / 60sec
+        // 1 HU / 6 sec
+        // 1 HU / 6*60 => 360
+        if (hungerTime == 0) {
+            hunger--; if (hunger < 0) hunger = 0;
+            hungerTime = 360;
+        }
+        if (hungerTime > 0) hungerTime--;
         
         if (stamina <= 0 && staminaRechargeDelay == 0 && staminaRecharge == 0) {
             staminaRechargeDelay = 40;
@@ -303,7 +323,7 @@ public class Player extends Creature {
         List<Entity> entities = field.getEntities(x0, y0, x1, y1);
         for (int i = 0; i < entities.size(); i++) {
             Entity e = entities.get(i);
-            System.out.println("U: " + e.getClass().getSimpleName());
+//            System.out.println("U: " + e.getClass().getSimpleName());
             if(e != this) if (e.use(this, dir)) return true;
         }
         return false;
@@ -324,6 +344,12 @@ public class Player extends Creature {
         if (!(e instanceof Player)) {
             e.touchedBy(this);
         }
+    }
+
+    public void eat(int hungerRegain) {
+        this.hunger += hungerRegain;
+        field.add(new TextParticle("E"+Integer.toString(hungerRegain), x, y));
+        if (hunger > maxHunger) hunger = maxHunger;
     }
     
 }

@@ -13,19 +13,20 @@ import caregame.field.Tile;
  * @author Markus
  */
 public class FoodResource extends Resource {
-    private int heal;
+    private int hungerRegain;
     private int staminaCost;
 
-    public FoodResource(int id, String name, String sprite, int heal, int staminaCost) {
+    public FoodResource(int id, String name, String sprite, int hungerRegain, int staminaCost) {
         super(id, name, sprite);
-        this.heal = heal;
+        this.hungerRegain = hungerRegain;
         this.staminaCost = staminaCost;
     }
 
     @Override
     public boolean interactOn(Tile tile, GameField field, int xt, int yt, Player player, int attackDir) {
-        if (player.health < player.maxHealth && player.payStamina(staminaCost)) {
-            player.heal(heal);
+        System.out.println("EAT");
+        if (player.hunger < player.maxHunger && player.payStamina(staminaCost)) {
+            player.eat(hungerRegain);
             return true;
         }
         return false;

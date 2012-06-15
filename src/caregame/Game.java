@@ -10,6 +10,7 @@ import caregame.field.GameField;
 import caregame.field.biome.Biome;
 import caregame.item.*;
 import caregame.item.resource.Resource;
+import caregame.screen.DeadScreen;
 import caregame.screen.LevelTransitionScreen;
 import caregame.screen.Screen;
 import caregame.screen.TitleScreen;
@@ -80,6 +81,7 @@ public class Game extends Canvas implements Runnable {
     
     public String worldName;
     
+    private int deadTime;
     public Player player;
     
     public InputHandler input = new InputHandler(this);
@@ -152,6 +154,7 @@ public class Game extends Canvas implements Runnable {
             player.inventory.add(new ToolItem(ToolType.axe, 0));
             player.inventory.add(new ResourceItem(Resource.wood, 999));
             player.inventory.add(new ResourceItem(Resource.wheatSeeds, 999));
+            player.inventory.add(new ResourceItem(Resource.bread, 999));
             player.inventory.add(new WaterCan(0));
         }
         player.findStartPos(field);
@@ -219,6 +222,10 @@ public class Game extends Canvas implements Runnable {
             } else {
                 if (player.removed) {
                     //DEAD SCREEN
+                    deadTime++;
+                    if (deadTime > 60) {
+                        setScreen(new DeadScreen());
+                    }
                 } else {
                     if (!player.removed && ticks % 60 == 0) gameTime++;
                     if (pendingLevelChange != 0) {
@@ -306,8 +313,11 @@ public class Game extends Canvas implements Runnable {
         if (Game.DEBUG) {
             Font.render(g, "T: " + ticks2 + ", F:" + fps2, 5, 5);
             Font.render(g, "TM: " + gameTime + "W: " + weather.getName(), 5, 5+8);
-            if (player != null)
+            if (player != null) {
                 Font.render(g, "P: " + player.x + "/" + player.y, 5, 5+8*2);
+                Font.render(g, "HP: " + player.health + "/" + player.maxHealth, 5, 5+8*3);
+                Font.render(g, "HU: " + player.hunger + "/" + player.maxHunger, 5, 5+8*4);
+            }
         }
         
         g.dispose();

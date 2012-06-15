@@ -21,7 +21,7 @@ public class Resource {
     public final static Resource pineSapling = new PlantableResource(3, "PINE SAPLING", "tanne.png", Tile.pineSapling, Tile.grass);
     public final static Resource flowerSeed = new PlantableResource(4, "FLOWER SEEDS", "blume_gelb.png", Tile.flowerSeed, Tile.farmland);
     public final static Resource cloth = new Resource(5, "CLOTH", "blume_gelb.png");
-    public final static Resource bread = new FoodResource(6, "BREAD", "brot.png", 1, 3);
+    public final static Resource bread = new FoodResource(6, "BREAD", "brot.png", 5, 0);
     public final static Resource wheatSeeds = new PlantableResource(7, "WHEAT SEEDS", "weizen_phase1.png", Tile.wheat, Tile.farmland);
     public final static Resource wheat = new Resource(8, "WHEAT", "wheat.png");
     public final static Resource flour = new Resource(9, "FLOUR", "weizen_phase2.png");

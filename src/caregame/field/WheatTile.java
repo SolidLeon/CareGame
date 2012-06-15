@@ -26,42 +26,33 @@ public class WheatTile extends Tile {
     }
 
     @Override
-    public int getWetness(GameField field, int xt, int yt) {
-        return ((field.getData(xt, yt)>>4)&0xf);
-    }
-
-    @Override
     public void render(Graphics g, GameField field, int xt, int yt) {
-        int age = field.getData(xt, yt)&0x7;
+        int age = field.getData(xt, yt);
 //        int progress = age / 10;
         
         Tile.farmland.render(g, field, xt, yt);
-        if (age == 0) {
+        if (age >= 0 && age < 20) {
             getSprite("texturen/seeds.png").render(g, xt*32, yt*32);
-        } else if (age == 1) {
+        } else if (age >= 20 && age < 40) {
             getSprite("phase1.png").render(g, xt*32, yt*32);
-        } else if (age == 2) {
+        } else if (age >= 40 && age < 60) {
             getSprite("phase2.png").render(g, xt*32, yt*32);
-        } else if (age == 3) {
+        } else if (age >= 60 && age < 80) {
             getSprite("phase3.png").render(g, xt*32, yt*32);
-        } else if (age == 4) {
+        } else if (age >= 80 && age < 100) {
             getSprite("weizen_phase1.png").render(g, xt*32, yt*32);
-        } else if (age == 5) {
+        } else if (age >= 100) {
             getSprite("weizen_phase2.png").render(g, xt*32, yt*32);
         }
     }
 
     @Override
     public void tick(GameField field, int xt, int yt) {
-        int age = (field.getData(xt, yt)&0x7);
-        if (age < 5 && random.nextInt(200) == 0) {
-            age += 1;
+        if (random.nextInt(80) == 0) return;
+        int age = field.getData(xt, yt);
+        if (age < 120) {
+            field.setData(xt, yt, age + (isWaterAround(field, xt, yt) ? 3 : 1));
         }
-        int wetness = getWetness(field, xt, yt);
-        if (wetness < 8 && random.nextInt(60) != 0 ) {
-            if (isWaterAround(field, xt, yt)) wetness += 1;
-        }
-        field.setData(xt, yt, (wetness<<4) | age);
     }
 
     
@@ -94,7 +85,7 @@ public class WheatTile extends Tile {
     
     private void harvest(GameField field, int xt, int yt) {
         int age = field.getData(xt, yt);
-        int count = random.nextInt(2);
+        int count = random.nextInt(2) + random.nextInt(1); //0-2;1-3
         for (int i = 0; i < count; i++) {
             field.add(
                     new ItemEntity(
@@ -103,9 +94,9 @@ public class WheatTile extends Tile {
                     yt*32+random.nextInt(10) + 3));
         }
         count = 0;
-        if (age == 50) {
+        if (age == 120) {
             count = random.nextInt(3) + 2;
-        } else if (age >= 40) {
+        } else if (age >= 100) {
             count = random.nextInt(2) + 1;
         }
         for (int i = 0; i < count; i++) {

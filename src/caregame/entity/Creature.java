@@ -66,7 +66,7 @@ public class Creature extends Entity {
     }
     
     public void heal(int heal) {
-        field.add(new TextParticle(Integer.toString(heal), x, y));
+        field.add(new TextParticle("H" + Integer.toString(heal), x, y));
         health += heal;
         if (health > maxHealth) health = maxHealth;
     }

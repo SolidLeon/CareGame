@@ -72,6 +72,7 @@ public class ResourceItem extends Item {
     
     @Override
     public boolean interactOn(Tile tile, GameField field, int xt, int yt, Player player, int attackDir) {
+        System.out.println("Interact On: " + resource.getClass().getSimpleName() + ":" + resource.name);
         if (resource.interactOn(tile, field, xt, yt, player, attackDir)) {
             count--;
             return true;

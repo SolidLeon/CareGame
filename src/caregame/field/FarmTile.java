@@ -26,42 +26,17 @@ public class FarmTile extends Tile {
     public FarmTile(int id) {
         super(id);
     }
-    
-    private boolean isWatered(GameField field, int xt, int yt) {
-        return ((field.getData(xt, yt)>>4)&0xf) == 8;
-    }
-
-    @Override
-    public int getWetness(GameField field, int xt, int yt) {
-        return ((field.getData(xt, yt)>>4)&0xf);
-    }
-    
-    
+        
     
     @Override
     public void tick(GameField field, int xt, int yt) {
-        int age = field.getData(xt, yt)&0xf;
-        if (age < 5) age++;
-        int wetness = getWetness(field, xt, yt);
-        if (wetness < 8) {
-            if (field.weather.isRaining()) {
-                wetness++;
-            }
-            for (int y = yt - 1; y <= yt + 1; y++) {
-                for (int x = xt - 1; x <= xt + 1; x++) {
-                    Tile t = field.getTile(x,y);
-                    if (t == Tile.water || t == Tile.waterHole) {
-                        wetness++;
-                    }
-                }
-            }
-            field.setData(xt, yt, (wetness<<4) | age);
-        }
+        int age = field.getData(xt, yt);
+        if (age < 5) field.setData(xt, yt, age + 1);
     }
 
     @Override
     public void steppedOn(GameField field, int xt, int yt, Entity e) {
-        if (isWatered(field, xt, yt)) return;
+        if (isWaterAround(field, xt, yt)) return;
         if (random.nextInt(60) != 0) return;
         if ((field.getData(xt, yt)&0xf) < 5) return;
         field.setTile(xt, yt, Tile.grass, 0);
@@ -79,7 +54,7 @@ public class FarmTile extends Tile {
     
     @Override
     public void render(Graphics g, GameField field, int tx, int ty) {
-        if (isWatered(field, tx, ty)){
+        if (isWaterAround(field, tx, ty)){
             ImageCache.get().get("texturen/feld_wasser.png").render(g, tx*Game.TILE_SIZE, ty*Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
         } else {
             ImageCache.get().get("texturen/feld.png").render(g, tx*Game.TILE_SIZE, ty*Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);

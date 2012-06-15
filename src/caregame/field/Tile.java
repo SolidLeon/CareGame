@@ -103,7 +103,4 @@ public class Tile {
         
     }
 
-    public int getWetness(GameField field, int xt, int yt) {
-        return 0;
-    }
 }

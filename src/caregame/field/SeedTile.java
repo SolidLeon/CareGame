@@ -39,17 +39,17 @@ public class SeedTile extends Tile {
     
     @Override
     public void tick(GameField field, int xt, int yt) {
-        int growth = 1;
+        int growth = 60;
         if (isWatered(field, xt, yt)) {
-            growth = 3;
+            growth = 90;
         } else {
             if (random.nextInt(100) == 0) {
                 field.setTile(xt, yt, Tile.grass, 0);
                 return;
             }
         }
-        if (random.nextInt(60) != 0) return;
-        int age = (field.getData(xt, yt)&0x7) + growth;
+        if (random.nextInt(growth) != 0) return;
+        int age = (field.getData(xt, yt)&0x7) + 1;
         if (age >= 3) { //4th age
             field.setTile(xt, yt, growsTo, 0);
         } else {
@@ -60,7 +60,7 @@ public class SeedTile extends Tile {
     @Override
     public void render(Graphics g, GameField field, int xt, int yt) {
         growsOn.render(g, field, xt, yt);
-        int age = field.getData(xt, yt);
+        int age = field.getData(xt, yt)&0x7;
         if (age == 0) ImageCache.get().get("phase1.png").render(g, xt*32, yt*32);
         if (age == 1) ImageCache.get().get("phase1.png").render(g, xt*32, yt*32);
         if (age == 2) ImageCache.get().get("phase2.png").render(g, xt*32, yt*32);
