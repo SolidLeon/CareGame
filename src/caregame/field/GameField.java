@@ -144,7 +144,7 @@ public class GameField {
                         if (x < 0 || y < 0 || x >= width || y >= height) continue;
                         int dist = (int) Math.sqrt(((xt-x)*(xt-x)) + ((yt-y)*(yt-y)));
                         if (dist < 0) dist *= -1;
-                        int ll = (int) (k*dist + 15.0f);
+                        int ll = (int) ((k*dist + 15.0f)*e.getLightIntensity());
                         if (light[x+y*width] < ll)
                             light[x+y*width] = (byte) ll;
                     }

@@ -56,6 +56,11 @@ public class Player extends Creature {
     public int getLightRadius() {
         return 2;
     }
+
+    @Override
+    public float getLightIntensity() {
+        return 0.5f;
+    }
     
     
     

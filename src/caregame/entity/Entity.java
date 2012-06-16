@@ -165,4 +165,8 @@ public class Entity {
     public int getLightRadius() {
         return 0;
     }
+
+    public float getLightIntensity() {
+        return 1.0f;
+    }
 }
