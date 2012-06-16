@@ -13,6 +13,7 @@ import caregame.field.Tile;
 import caregame.item.Item;
 import caregame.screen.CraftingScreen;
 import caregame.screen.InventoryScreen;
+import caregame.screen.TitleScreen;
 import java.awt.Graphics;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -232,6 +233,10 @@ public class Player extends Creature {
             }
         }
         if (attackTime > 0) attackTime--;
+        
+        if (input.escape.clicked) {
+            game.setScreen(new TitleScreen());
+        }
     }
     
     private void attack() {

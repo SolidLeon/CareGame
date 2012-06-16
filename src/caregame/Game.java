@@ -4,6 +4,7 @@
  */
 package caregame;
 
+import caregame.entity.Bag;
 import caregame.entity.Entity;
 import caregame.entity.Player;
 import caregame.field.GameField;
@@ -148,12 +149,10 @@ public class Game extends Canvas implements Runnable {
         canResume = false;
         player = new Player(this, input);
         if (cheatMode) {
-            player.inventory.add(new ToolItem(ToolType.hoe, 0));
-            player.inventory.add(new ToolItem(ToolType.shovel, 0));
-            player.inventory.add(new ToolItem(ToolType.axe, 0));
             player.inventory.add(new ResourceItem(Resource.wood, 999));
-            player.inventory.add(new ResourceItem(Resource.wheatSeeds, 999));
-            player.inventory.add(new ResourceItem(Resource.bread, 999));
+            player.inventory.add(new ResourceItem(Resource.bottle, 999));
+            player.inventory.add(new ResourceItem(Resource.wheat, 999));
+            player.inventory.add(new FurnitureItem(new Bag()));
             player.inventory.add(new WaterCan(0));
         }
         player.findStartPos(field);
@@ -329,7 +328,10 @@ public class Game extends Canvas implements Runnable {
     private void renderLight(Graphics g, int x0, int y0, int x1, int y1) {
         Color old = g.getColor();
         //ll = 0-15 ... 0 dark 15 bright
-        int globalLight = ll[(gameTime / 60 / 60) - 1];
+        int l = (gameTime / 60 / 60);
+        if (l<0) l = 0;
+        if (l>15)l=15;
+        int globalLight = ll[l];
         for (int y = y0; y <= y1; y++) {
             for (int x = x0; x <= x1; x++) {
                 if (x < 0 || y < 0 || x >= field.width || y >= field.height) continue;

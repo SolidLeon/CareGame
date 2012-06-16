@@ -34,7 +34,9 @@ public class Crafting {
             workbenchRecipes.add(new ToolRecipe(ToolType.shovel, 0).addCosts(Resource.wood, 5));
             workbenchRecipes.add(new ToolRecipe(ToolType.sword, 0).addCosts(Resource.wood, 5));
             workbenchRecipes.add(new ToolRecipe(ToolType.can, 0).addCosts(Resource.wood, 5));
-            workbenchRecipes.add(new ResourceRecipe(Resource.bread).addCosts(Resource.wheat, 5));
+//            workbenchRecipes.add(new ResourceRecipe(Resource.waterBottle).addCosts(Resource.glass, 5));
+            workbenchRecipes.add(new ResourceRecipe(Resource.flour).addCosts(Resource.wheat, 5));
+            workbenchRecipes.add(new ResourceRecipe(Resource.bread).addCosts(Resource.flour, 2).addCosts(Resource.waterBottle, 2));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

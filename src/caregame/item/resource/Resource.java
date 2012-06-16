@@ -24,7 +24,9 @@ public class Resource {
     public final static Resource bread = new FoodResource(6, "BREAD", "brot.png", 5, 0);
     public final static Resource wheatSeeds = new PlantableResource(7, "WHEAT SEEDS", "weizen_phase1.png", Tile.wheat, Tile.farmland);
     public final static Resource wheat = new Resource(8, "WHEAT", "wheat.png");
-    public final static Resource flour = new Resource(9, "FLOUR", "weizen_phase2.png");
+    public final static Resource flour = new Resource(9, "FLOUR", "flour.png");
+    public final static Resource bottle = new Resource(10, "BOTTLE", "waterBottle.png");
+    public final static Resource waterBottle = new Resource(11, "WATER BOTTLE", "waterBottle.png");
     
     
     public final byte id;

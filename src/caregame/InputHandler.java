@@ -53,6 +53,7 @@ public class InputHandler implements KeyListener {
     public Key crafting = new Key();
     public Key drop = new Key();
     // text input
+    public Key escape = new Key();
     public Key enter = new Key();
     public Key space = new Key();
     public Key backspace = new Key();
@@ -102,6 +103,7 @@ public class InputHandler implements KeyListener {
         if (ke.getKeyCode() == KeyEvent.VK_RIGHT) right.toggle(pressed);
         if (ke.getKeyCode() == KeyEvent.VK_UP) up.toggle(pressed);
         if (ke.getKeyCode() == KeyEvent.VK_DOWN) down.toggle(pressed);
+        if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) escape.toggle(pressed);
         if (!textInputActive) {
             if (ke.getKeyCode() == KeyEvent.VK_A) left.toggle(pressed);
             if (ke.getKeyCode() == KeyEvent.VK_D) right.toggle(pressed);

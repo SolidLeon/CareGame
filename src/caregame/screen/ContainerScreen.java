@@ -33,10 +33,11 @@ public class ContainerScreen extends Screen{
         int ox = game.getWidth() / 2 - 250;
         int oy = 20;
         
-        renderFrameText(g, ox, oy, 500, ALIGN_CENTER, title);
-        renderFrameText(g, ox, oy + getFrameHeight(1), 250, ALIGN_CENTER, "Container");
-        renderFrameText(g, ox + 250, oy + getFrameHeight(1), 250, ALIGN_CENTER, "Inventory");
+        renderFrameText(g, ox, oy, 250, ALIGN_CENTER, title);
+        renderFrameText(g, ox + 250, oy , 250, ALIGN_CENTER, "Inventory");
         
+        renderFrameText(g, ox, oy + getFrameHeight(1), 250, ALIGN_CENTER, container.maxSlots == -1 ? "Infinite" : Integer.toString(container.maxSlots));
+        renderFrameText(g, ox + 250, oy + getFrameHeight(1), 250, ALIGN_CENTER, player.inventory.maxSlots == -1 ? "Infinite" : Integer.toString(player.inventory.maxSlots));
         if (window == 0) {
             renderItems(g, ox, oy + getFrameHeight(1)*2, 250, ALIGN_LEFT, selection, container.items);
             renderItems(g, ox+250, oy + getFrameHeight(1)*2, 250, ALIGN_LEFT, player.inventory.items);
@@ -58,12 +59,14 @@ public class ContainerScreen extends Screen{
         
         if (input.attack.clicked) {
             if (window == 0 && container.items.size() > 0) {
-                Item item = container.items.remove(selection);
-                player.inventory.add(0, item);
+                if (player.inventory.add(0, container.items.get(selection))) {
+                    container.items.remove(selection);
+                }
             }
             if (window == 1 && player.inventory.items.size() > 0){
-                Item item = player.inventory.items.remove(selection);
-                container.add(0, item);
+                if (container.add(0, player.inventory.items.get(selection))) {
+                    player.inventory.items.remove(selection);
+                }
             }
         }
         

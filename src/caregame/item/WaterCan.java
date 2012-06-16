@@ -23,7 +23,7 @@ public class WaterCan extends ToolItem {
     @Override
     public boolean interactOn(Tile tile, GameField field, int xt, int yt, Player player, int attackDir) {
         if (tile == Tile.hole) {
-            field.setTile(xt, yt, Tile.waterHole, 0);
+            field.setTile(xt, yt, Tile.waterHole, 10);
             player.inventory.add(new Can(level));
             empty = true;
             return true;

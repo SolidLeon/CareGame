@@ -42,7 +42,11 @@ public class ResourceItem extends Item {
     @Override
     public void renderInventory(Graphics g, int x, int y) {
         getSprite().render(g, x, y-4, 16, 16);
-        Font.render(g, String.format("%03d", count), x+24, y);
+        if (count > 999) {
+            Font.render(g, String.format("%02d+", 99), x+24, y);
+        } else {
+            Font.render(g, String.format("%03d", count), x+24, y);
+        }
         Font.render(g, getName(), x+32+Font.getWidth("000"), y);
     }
 

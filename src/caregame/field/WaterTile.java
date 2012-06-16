@@ -8,6 +8,10 @@ import caregame.Game;
 import caregame.ImageCache;
 import caregame.OPCODES;
 import caregame.entity.Entity;
+import caregame.entity.Player;
+import caregame.item.Item;
+import caregame.item.ResourceItem;
+import caregame.item.resource.Resource;
 import java.awt.Graphics;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -83,6 +87,20 @@ public class WaterTile extends Tile {
     @Override
     public boolean mayPass(GameField field, int x, int y, Entity e) {
         return e.canSwim();
+    }
+
+    @Override
+    public boolean interact(GameField field, int xt, int yt, Player player, Item item, int attackDir) {
+        if (item instanceof ResourceItem) {
+            ResourceItem ri = (ResourceItem) item;
+            if (ri.resource == Resource.bottle) {
+                if(player.inventory.add(0, new ResourceItem(Resource.waterBottle))) {
+                    ri.count--;
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
     
