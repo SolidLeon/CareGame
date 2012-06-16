@@ -27,13 +27,22 @@ public class AboutScreen extends Screen {
         renderFrameText(g, game.getWidth() / 2 - 150, 22+Font.getLineHeight(), 300, ALIGN_LEFT,
                 "This game is made by Markus Mannel.", 
                 "Graphics made by Desiree Hackl.", 
+                "",
+                "Influenced by Harvest Moon,", 
+                "MineCraft and Minicraft.", 
+                "",
+                "Special thanks to Notch and",
+                "his LD22 Minicraft, since that",
+                "game helped me badly developing",
+                "this game.",
+                "",
                 "Copyright by Markus Mannel 2012");
         renderFrameText(g, game.getWidth() / 2 - 150, game.getHeight() - getFrameHeight(1)*2, 300, ALIGN_CENTER, "Press any key");
     }
 
     @Override
     public void tick() {
-        if (input.attack.down || input.menu.down) 
+        if (input.attack.clicked || input.menu.clicked) 
             game.setScreen(new TitleScreen());
     }
     

@@ -32,13 +32,13 @@ public class OptionsScreen extends Screen {
 
     @Override
     public void tick() {
+        if (input.attack.clicked || input.menu.clicked || input.space.clicked || input.enter.clicked) game.setScreen(new TitleScreen());
         if (input.left.clicked) {
             if (selection == 0) {Game.TILE_SIZE /= 2;if (Game.TILE_SIZE < 8) Game.TILE_SIZE = 8;}
         }
         if (input.right.clicked) {
             if (selection == 0 && !game.canResume) Game.TILE_SIZE *= 2;
         }
-        if (input.menu.clicked) game.setScreen(new TitleScreen());
         if (input.up.clicked) selection--;
         if (input.down.clicked) selection++;
         

@@ -22,11 +22,11 @@ public class HelpScreen extends Screen {
     public void render(Graphics g) {
         renderFrameText(g, game.getWidth() / 2 - 150, 0, 300, ALIGN_CENTER, "HELP");
         renderFrameText(g, game.getWidth() / 2 - 150, getFrameHeight(1), 300, ALIGN_LEFT, 
-                "ARROW KEYS: move around",
+                "ARROW/WASD KEYS: move around",
                 "E: inventory",
-                "D: delete selected item",
+                "Q: Drop item",
                 "ESC: to title", 
-                "SPACE: use / select");
+                "SPACE/ENTER: use / select");
         renderFrameText(g, game.getWidth() / 2 - 150, game.getHeight() - getFrameHeight(1)*2, 300, ALIGN_CENTER, "Press any key");
     }
 
