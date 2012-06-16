@@ -40,10 +40,13 @@ public class GrassTile extends Tile {
                 if (random.nextInt(25) == 0) {    
                     field.add(new ItemEntity(new ResourceItem(Resource.wheatSeeds, 1),xt * 32 + random.nextInt(10) + 3, yt * 32 + random.nextInt(10) + 3));
                 }
+                tool.durability--;
                 return true;
             }
             if (tool.type == ToolType.shovel) {
                 field.setTile(xt, yt, Tile.hole, 0);
+                tool.durability--;
+                return true;
             }
         }
         if (item instanceof ResourceItem) {
