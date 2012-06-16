@@ -66,9 +66,8 @@ public class Player extends Creature {
     
     public boolean payStamina(int cost) {
         if (cost == 0) return true;
-        if (cost > stamina || (cost*2) > hunger) return false;
+        if (cost > stamina) return false;
         stamina -= cost;
-        hunger -= cost * 2;
         return true;
     }
 
