@@ -89,7 +89,7 @@ public class Game extends Canvas implements Runnable {
     private int currentLevel;
     private int pendingLevelChange;
     
-    private byte []ll = { 0, 2, 4, 6, 8, 12, 14, 15, 14, 12, 8, 6, 4, 2, 0 };
+    private byte []ll = { 1, 2, 4, 6, 8, 12, 14, 15, 14, 12, 8, 6, 4, 2, 1 };
     /**
      * game time in seconds (so each 60ticks, +1)
      * one day takes 16 minutes, so 8 minutes day, 8 minutes night
@@ -312,7 +312,7 @@ public class Game extends Canvas implements Runnable {
         
         if (Game.DEBUG) {
             Font.render(g, "T: " + ticks2 + ", F:" + fps2, 5, 5);
-            Font.render(g, "TM: " + gameTime + "W: " + weather.getName(), 5, 5+8);
+            Font.render(g, "TM: " + gameTime + " (LL: "+(1.0f-(((int)(gameTime/60.0) / 15.0f)))+" T: "+(1.0f-(field.getLightLevel(player.x>>5, player.y>>5) / 15.0f))+") W: " + weather.getName(), 5, 5+8);
             if (player != null) {
                 Font.render(g, "P: " + player.x + "/" + player.y, 5, 5+8*2);
                 Font.render(g, "HP: " + player.health + "/" + player.maxHealth, 5, 5+8*3);
@@ -329,11 +329,16 @@ public class Game extends Canvas implements Runnable {
 
     private void renderLight(Graphics g, int x0, int y0, int x1, int y1) {
         Color old = g.getColor();
-//        g.setColor(new Color(0, 0, 0, 100));
-        g.setColor(new Color(0, 0, 0, ll[gameTime / 60]));
+        //ll = 0-15 ... 0 dark 15 bright
+        int globalLight = ll[gameTime / 60];
         for (int y = y0; y <= y1; y++) {
             for (int x = x0; x <= x1; x++) {
-                g.fillRect(x*32, y*32, 32, 32);
+                int lightLevel = ll[field.getLightLevel(x, y)];
+                if (lightLevel > globalLight) 
+                    g.setColor(new Color(0, 0, 0, 1.0f-(lightLevel/15.0f)));
+                else
+                    g.setColor(new Color(0, 0, 0, 1.0f-(globalLight/15.0f)));
+                g.fillRect(x*32,y*32,32,32);
             }
         }
         g.setColor(old);
