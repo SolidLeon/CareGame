@@ -17,10 +17,8 @@ import caregame.screen.TitleScreen;
 import caregame.weather.Weather;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -59,6 +57,7 @@ public class Game extends Canvas implements Runnable {
     }
     
     public boolean debug = false;
+    private Random random = new Random();
     
     private boolean running;
     private BufferStrategy bs;
@@ -138,7 +137,7 @@ public class Game extends Canvas implements Runnable {
         startNewGame(worldName, false);
     }
     public void startNewGame(String worldName, boolean cheatMode) {
-        gameTime = 0;
+        gameTime = random.nextInt(16*60*60);
         this.worldName = worldName;
         currentLevel = 255;
         fields = new GameField[256];
