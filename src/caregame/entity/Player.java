@@ -51,6 +51,13 @@ public class Player extends Creature {
         //xr = 24;
         //yr = 24;
     }
+
+    @Override
+    public int getLightRadius() {
+        return 2;
+    }
+    
+    
     
     public boolean payStamina(int cost) {
         if (cost == 0) return true;

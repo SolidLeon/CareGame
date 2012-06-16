@@ -109,11 +109,12 @@ public class GameField {
 //        if (gameTime > 8*60) gameTime = 0;
 //        int tm = (gameTime/60);
 //        for (int i = 0; i < light.length; i++) light[i] = ll[tm]; //set to daytime depending value
-        
+        for (int i = 0; i < light.length; i++) light[i] = 0;
         for (int i = 0; i < width * height / 50; i++) {
             int xt = random.nextInt(width);
             int yt = random.nextInt(height);
             getTile(xt, yt).tick(this, xt, yt);
+//            light[xt + yt*width] = getTile(xt, yt).getLigtRadius();
         }
         
         for (int i = 0; i < entities.size(); i++) {
@@ -125,11 +126,28 @@ public class GameField {
                 entities.remove(i--);
                 removeEntity(xto, yto, e);
             } else {
-                int xt = e.x / Game.TILE_SIZE;
-                int yt = e.y / Game.TILE_SIZE;
+                int xt = e.x >> 5;
+                int yt = e.y >> 5;
                 if (xt != xto || yt != yto) {
                     removeEntity(xto, yto, e);
                     insertEntity(xt, yt, e);
+                }
+                //apply light
+                int r = e.getLightRadius();
+                float k = -15.0f / (float) r;
+                int x0 = xt - r;
+                int y0 = yt - r;
+                int x1 = xt + r;
+                int y1 = yt + r;
+                for (int x = x0; x <= x1; x++) {
+                    for (int y = y0; y <= y1; y++) {
+                        if (x < 0 || y < 0 || x >= width || y >= height) continue;
+                        int dist = (int) Math.sqrt(((xt-x)*(xt-x)) + ((yt-y)*(yt-y)));
+                        if (dist < 0) dist *= -1;
+                        int ll = (int) (k*dist + 15.0f);
+                        if (light[x+y*width] < ll)
+                            light[x+y*width] = (byte) ll;
+                    }
                 }
             }
         }

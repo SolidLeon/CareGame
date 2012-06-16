@@ -333,9 +333,10 @@ public class Game extends Canvas implements Runnable {
         int globalLight = ll[gameTime / 60];
         for (int y = y0; y <= y1; y++) {
             for (int x = x0; x <= x1; x++) {
-                int lightLevel = ll[field.getLightLevel(x, y)];
+                if (x < 0 || y < 0 || x >= field.width || y >= field.height) continue;
+                int lightLevel = field.getLightLevel(x, y);
                 if (lightLevel > globalLight) 
-                    g.setColor(new Color(0, 0, 0, 1.0f-(lightLevel/15.0f)));
+                    g.setColor(new Color(0, 0, 0, 1.0f-(lightLevel/15.0f))); //LL = 0..15
                 else
                     g.setColor(new Color(0, 0, 0, 1.0f-(globalLight/15.0f)));
                 g.fillRect(x*32,y*32,32,32);

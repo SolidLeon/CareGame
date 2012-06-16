@@ -161,4 +161,8 @@ public class Entity {
     public boolean isBlockableBy(Creature creature) {
         return true;
     }
+
+    public int getLightRadius() {
+        return 0;
+    }
 }
