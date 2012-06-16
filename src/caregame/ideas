@@ -6,16 +6,16 @@ Update 1
   * Smash/use
   * Walk
 - Water must FLOW - if you dig a hole tile next to a water tile, the hole tile gets flooded.
-- Tile watering should be slower, and a little bit random, instead of being
+- [ABANDONED] Tile watering should be slower, and a little bit random, instead of being
   watered instantly as soon as a water/water hole tile is next to it.
     Technically almost not doable since we have no seperated seed tile where the farmland underneath can be watered.
     Attempts were made, but failed due to insufficient bits to get a smooth aging AND wetting.
-- Rain should water tiles.
+- [DONE] Rain should water tiles.
     WORKS!!!
 
 TODO:
 
-- Inventory capacity DONE
+- [DONE] Inventory capacity
 
 - Equipment support
     Head
@@ -66,8 +66,8 @@ Content
   * Aggressive (wolves etc)
   * Passive (sheep, cow)
 - Light Support
-  * Daylight (Sun / Moon)
-  * Lightsources, entities and tiles
+  * [DONE] Daylight (Sun / Moon)
+  * [DONE] Lightsources, entities and tiles
   * Different Light colors (sun=bright yellow/white; moon=dark,blue,cold; torch=yellow/red, dark)
 - Level Generator
   * Biome support
