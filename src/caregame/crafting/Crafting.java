@@ -5,6 +5,7 @@
 package caregame.crafting;
 
 import caregame.entity.Bag;
+import caregame.entity.Torch;
 import caregame.entity.Workbench;
 import caregame.item.ToolType;
 import caregame.item.resource.Resource;
@@ -28,6 +29,7 @@ public class Crafting {
             freeRecipes.add(new FurnitureRecipe(Workbench.class).addCosts(Resource.wood, 5));
             workbenchRecipes.add(new FurnitureRecipe(Bag.class).addCosts(Resource.cloth, 9));
             workbenchRecipes.add(new FurnitureRecipe(Workbench.class).addCosts(Resource.wood, 5));
+            workbenchRecipes.add(new FurnitureRecipe(Torch.class).addCosts(Resource.wood, 3)); //add coal
             workbenchRecipes.add(new ToolRecipe(ToolType.hoe, 0).addCosts(Resource.wood, 5));
             workbenchRecipes.add(new ToolRecipe(ToolType.axe, 0).addCosts(Resource.wood, 5));
             workbenchRecipes.add(new ToolRecipe(ToolType.pickaxe, 0).addCosts(Resource.wood, 5));
