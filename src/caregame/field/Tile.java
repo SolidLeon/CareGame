@@ -102,5 +102,9 @@ public class Tile {
     public void hurt(GameField field, int xt, int yt, Creature attacker, int dmg, int dir) {
         
     }
+    
+    public boolean opaque(GameField field, int xt, int yt) {
+        return true;
+    }
 
 }
