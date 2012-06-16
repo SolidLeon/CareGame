@@ -88,7 +88,7 @@ public class Game extends Canvas implements Runnable {
     private int currentLevel;
     private int pendingLevelChange;
     
-    private byte []ll = { 0, 2, 4, 6, 8, 12, 14, 15, 14, 12, 8, 6, 4, 2, 0 };
+    private byte []ll = { 0, 2, 4, 6, 8, 12, 14, 15, 15, 14, 12, 8, 6, 4, 2, 0 };
     /**
      * game time in seconds (so each 60ticks, +1)
      * one day takes 16 minutes, so 8 minutes day, 8 minutes night
@@ -137,7 +137,7 @@ public class Game extends Canvas implements Runnable {
         startNewGame(worldName, false);
     }
     public void startNewGame(String worldName, boolean cheatMode) {
-        gameTime = random.nextInt(16*60*60);
+        gameTime = random.nextInt(57600);
         this.worldName = worldName;
         currentLevel = 255;
         fields = new GameField[256];
@@ -329,7 +329,7 @@ public class Game extends Canvas implements Runnable {
     private void renderLight(Graphics g, int x0, int y0, int x1, int y1) {
         Color old = g.getColor();
         //ll = 0-15 ... 0 dark 15 bright
-        int globalLight = ll[gameTime / 60];
+        int globalLight = ll[(gameTime / 60 / 60) - 1];
         for (int y = y0; y <= y1; y++) {
             for (int x = x0; x <= x1; x++) {
                 if (x < 0 || y < 0 || x >= field.width || y >= field.height) continue;
