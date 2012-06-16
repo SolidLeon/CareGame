@@ -29,7 +29,7 @@ public class HoleTile extends Tile {
 
     @Override
     public boolean mayPass(GameField field, int x, int y, Entity e) {
-        return true;
+        return false;
     }
     
     

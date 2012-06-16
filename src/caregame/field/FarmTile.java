@@ -32,6 +32,9 @@ public class FarmTile extends Tile {
     public void tick(GameField field, int xt, int yt) {
         int age = field.getData(xt, yt);
         if (age < 5) field.setData(xt, yt, age + 1);
+        if (age >= 5 && !isWaterAround(field, xt, yt) && random.nextInt(60) == 0) {
+            field.setTile(xt, yt, Tile.grass, 0);
+        }
     }
 
     @Override

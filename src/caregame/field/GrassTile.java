@@ -37,10 +37,7 @@ public class GrassTile extends Tile {
             ToolItem tool = (ToolItem) item;
             if (tool.type == ToolType.hoe) {
                 field.setTile(xt, yt, Tile.farmland, 0);
-                if (random.nextInt(50) == 0) {    
-                    field.add(new ItemEntity(new ResourceItem(Resource.flowerSeed, 1),xt * 32 + random.nextInt(10) + 3, yt * 32 + random.nextInt(10) + 3));
-                }
-                if (random.nextInt(50) == 0) {    
+                if (random.nextInt(25) == 0) {    
                     field.add(new ItemEntity(new ResourceItem(Resource.wheatSeeds, 1),xt * 32 + random.nextInt(10) + 3, yt * 32 + random.nextInt(10) + 3));
                 }
                 return true;
