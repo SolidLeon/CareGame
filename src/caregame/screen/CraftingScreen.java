@@ -33,7 +33,6 @@ public class CraftingScreen extends Screen {
         }
 
         Collections.sort(this.recipes, new Comparator<Recipe>() {
-
             public int compare(Recipe r1, Recipe r2) {
                 if (r1.canCraft && !r2.canCraft) {
                     return -1;
@@ -93,6 +92,18 @@ public class CraftingScreen extends Screen {
             for (int i = 0; i < recipes.size(); i++) {
                 recipes.get(i).checkCanCraft(player.inventory);
             }
+            
+            Collections.sort(this.recipes, new Comparator<Recipe>() {
+                public int compare(Recipe r1, Recipe r2) {
+                    if (r1.canCraft && !r2.canCraft) {
+                        return -1;
+                    }
+                    if (!r1.canCraft && r2.canCraft) {
+                        return 1;
+                    }
+                    return 0;
+                }
+            });
         }
     }
 }

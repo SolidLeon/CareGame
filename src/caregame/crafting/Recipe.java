@@ -34,13 +34,13 @@ public abstract class Recipe implements ListItem {
     }
     
     public void checkCanCraft(Inventory inv) {
-        if (!inv.isInfinite() && inv.remaining() <= 0) {
+        if (inv.maxSlots >= 0 && inv.remaining() <= 0) {
             //check if we can fraft it due to stackable resources
             if (resultTemplate instanceof ResourceItem) {
                 ResourceItem ri = (ResourceItem) resultTemplate;
-                if (inv.count(ri.resource) > 0) {
-                    canCraft = true;
-                    //no return since we have to check canCraft for required resources!
+                if (inv.count(ri.resource) <= 0) {
+                    canCraft = false;
+                    return;
                 }
             } else {
                 canCraft = false;
