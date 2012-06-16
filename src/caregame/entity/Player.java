@@ -59,7 +59,7 @@ public class Player extends Creature {
 
     @Override
     public float getLightIntensity() {
-        return 0.5f;
+        return 0.3f;
     }
     
     

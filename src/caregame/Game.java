@@ -89,7 +89,7 @@ public class Game extends Canvas implements Runnable {
     private int currentLevel;
     private int pendingLevelChange;
     
-    private byte []ll = { 1, 2, 4, 6, 8, 12, 14, 15, 14, 12, 8, 6, 4, 2, 1 };
+    private byte []ll = { 0, 2, 4, 6, 8, 12, 14, 15, 14, 12, 8, 6, 4, 2, 0 };
     /**
      * game time in seconds (so each 60ticks, +1)
      * one day takes 16 minutes, so 8 minutes day, 8 minutes night
