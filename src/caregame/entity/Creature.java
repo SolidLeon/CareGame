@@ -32,6 +32,7 @@ public class Creature extends Entity {
         if (health <= 0) {
             die();
         }
+        if (hurtTime > 0) hurtTime--;
     }
     
     protected void die() {

@@ -6,6 +6,8 @@ package caregame.entity;
 
 import caregame.ImageCache;
 import caregame.Sprite;
+import caregame.item.ResourceItem;
+import caregame.item.resource.Resource;
 import java.awt.Graphics;
 
 /**
@@ -44,6 +46,16 @@ public class Pig extends Creature {
         s.render(g, x-xr, y-yr, 32, 32);
     }
 
+    @Override
+    protected void die() {
+        int n = random.nextInt(1) + 1;
+        for (int i = 0; i < n; i++) {
+            field.add(new ItemEntity(new ResourceItem(Resource.rawPorkchop), x+random.nextInt(10) + 3, y + random.nextInt(10) + 3));
+        }
+        super.die();
+    }
+
+    
     
     
 }
