@@ -14,6 +14,7 @@ import caregame.item.Item;
 import caregame.screen.CraftingScreen;
 import caregame.screen.InventoryScreen;
 import caregame.screen.TitleScreen;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -30,6 +31,8 @@ public class Player extends Creature {
     public Item activeItem;
     private InputHandler input;
     
+    private int interactRange = 24;
+    private int attackRange = 8;
     
     private int maxStamina = 10;
     private int stamina = maxStamina;
@@ -105,6 +108,25 @@ public class Player extends Creature {
 //        g.fillRect(x, y, 1, 1);
         //draw hitbox
         if (Game.DEBUG) {
+            //range
+//            if (dir == DIR_WEST) xt = (x - xr - range) >> 5;
+//            if (dir == DIR_EAST) xt = (x + xr + range) >> 5;
+//            if (dir == DIR_SOUTH) yt = (y + yr + range) >> 5;
+//            if (dir == DIR_NORTH) yt = (y - yr - range) >> 5;
+            int yo2 = -yr;
+            g.setColor(Color.blue);
+            if (dir == DIR_WEST)g.drawLine(x - xr - interactRange, y+yo2, x, y+yo2);
+            if (dir == DIR_EAST)g.drawLine(x, y+yo2, x + xr + interactRange, y+yo2);
+            if (dir == DIR_SOUTH)g.drawLine(x, y+yo2, x, y + yr + interactRange+yo2);
+            if (dir == DIR_NORTH)g.drawLine(x, y+yo2 - yr - interactRange, x, y+yo2);
+            g.setColor(Color.red);
+            if (dir == DIR_WEST)g.drawLine(x - xr - attackRange, y, x, y);
+            if (dir == DIR_EAST)g.drawLine(x, y, x + xr + attackRange, y);
+            if (dir == DIR_SOUTH)g.drawLine(x, y, x, y + yr + attackRange);
+            if (dir == DIR_NORTH)g.drawLine(x, y - yr - attackRange, x, y);
+            
+            //move box
+            g.setColor(Color.black);
             g.drawRect(x-xr, y-yr, xr+xr, yr+yr);
             g.drawLine(x-xr, y-yr, x + xr, y + yr);
             g.drawLine(x-xr,y+yr,x+xr,y-yr);
@@ -243,26 +265,26 @@ public class Player extends Creature {
     private void attack() {
         attackDir = dir;
         attackItem = activeItem;
-        int r = 12;
+        int yo = -yr;
         boolean done = false;
         if (activeItem != null) {
             attackTime = 10;
-            int range = 8;
+//            int interactRange = 8;
             //interact with entities
             System.out.println("Interact with entities...");
-            if (dir == DIR_WEST && interact(x - xr - range, y, x - xr, y)) done = true; 
-            if (dir == DIR_EAST && interact(x + xr, y, x + xr + range, y)) done = true; 
-            if (dir == DIR_SOUTH && interact(x, y+yr, x, y + yr + range)) done = true; 
-            if (dir == DIR_NORTH && interact(x, y-yr-range, x, y - yr)) done = true; 
+            if (dir == DIR_WEST && interact(x - xr - interactRange, y+yo, x - xr, y+yo)) done = true; 
+            if (dir == DIR_EAST && interact(x + xr, y+yo, x + xr + interactRange, y+yo)) done = true; 
+            if (dir == DIR_SOUTH && interact(x, y+yr+yo, x, y + yr + interactRange)) done = true; 
+            if (dir == DIR_NORTH && interact(x, y-yr-interactRange+yo, x, y - yr+yo)) done = true; 
             if(done) return;
 
             int xt = x >> 5;
-            int yt = y >> 5;
+            int yt = (y+yo) >> 5;
 
-            if (dir == DIR_WEST) xt = (x - xr - range) >> 5;
-            if (dir == DIR_EAST) xt = (x + xr + range) >> 5;
-            if (dir == DIR_SOUTH) yt = (y + yr + range) >> 5;
-            if (dir == DIR_NORTH) yt = (y - yr - range) >> 5;
+            if (dir == DIR_WEST) xt = (x - xr - interactRange) >> 5;
+            if (dir == DIR_EAST) xt = (x + xr + interactRange) >> 5;
+            if (dir == DIR_SOUTH) yt = (y + yr + interactRange+yo) >> 5;
+            if (dir == DIR_NORTH) yt = (y - yr - interactRange+yo) >> 5;
             if (xt >= 0 && yt >= 0 && xt < field.width && yt < field.height){
                 //interact item on tile (like placing furniture)
                 System.out.println("Interact with active item " + activeItem.getName() + " on " + field.getTile(xt,yt).getClass().getSimpleName() + ".");
@@ -283,7 +305,7 @@ public class Player extends Creature {
         //hurt entity or tile
         if (activeItem == null || activeItem.canAttack()) {
             attackTime = 5;
-            int range = 8;
+//            int attackRange = 8;
             System.out.println("Attack, noactive item // attackable");
 //            if (dir == DIR_WEST) hurt(x - 32, y, x - 32 - r, y); 
 //            if (dir == DIR_EAST) hurt(x + 32, y, x + 32 + r, y); 
@@ -293,17 +315,17 @@ public class Player extends Creature {
 //            if (dir == DIR_EAST)  hurt(x + xr, y, x + xr + 14, y); 
 //            if (dir == DIR_SOUTH) hurt(x, y + yr, x, y + yr + 14); 
 //            if (dir == DIR_NORTH) hurt(x, y - yr - 14, x, y - yr); 
-            if (dir == DIR_WEST)  hurt(x - xr - range, y     , x - xr, y); 
-            if (dir == DIR_EAST)  hurt(x + xr, y     , x + xr + range, y); 
-            if (dir == DIR_SOUTH) hurt(x     , y + yr, x     , y + yr + range); 
-            if (dir == DIR_NORTH) hurt(x     , y - yr - range, x     , y - yr); 
+            if (dir == DIR_WEST)  hurt(x - xr - attackRange, y+yo     , x - xr, y+yo); 
+            if (dir == DIR_EAST)  hurt(x + xr, y+yo     , x + xr + attackRange, y+yo); 
+            if (dir == DIR_SOUTH) hurt(x     , y + yr+yo, x     , y + yr + attackRange+yo); 
+            if (dir == DIR_NORTH) hurt(x     , y - yr - attackRange+yo, x     , y - yr+yo); 
             
             int xt = x >> 5;
-            int yt = y >> 5;
-            if (dir == DIR_WEST)  xt = (x - xr - range) >> 5;
-            if (dir == DIR_EAST)  xt = (x + xr + range) >> 5;
-            if (dir == DIR_NORTH) yt = (y - yr - range) >> 5;
-            if (dir == DIR_SOUTH) yt = (y + yr + range) >> 5;
+            int yt = (y+yo) >> 5;
+            if (dir == DIR_WEST)  xt = (x - xr - attackRange) >> 5;
+            if (dir == DIR_EAST)  xt = (x + xr + attackRange) >> 5;
+            if (dir == DIR_NORTH) yt = (y - yr - attackRange+yo) >> 5;
+            if (dir == DIR_SOUTH) yt = (y + yr + attackRange+yo) >> 5;
             if (xt >= 0 && yt >= 0 && xt < field.width && yt < field.height){
                 System.out.println("Hurt tile");
                 field.getTile(xt, yt).hurt(field, xt, yt, this, random.nextInt(3)+1, dir);
