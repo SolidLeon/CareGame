@@ -118,7 +118,7 @@ public class Inventory {
     }
     
     public void write(DataOutputStream out) throws IOException {
-        out.writeInt(OPCODES.OP_INVENTORY);
+//        out.writeInt(OPCODES.opcodes.get(getClass()));
         
         out.writeInt(items.size());
         for (int i = 0; i < items.size(); i++) {

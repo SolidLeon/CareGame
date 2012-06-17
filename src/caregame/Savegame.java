@@ -6,6 +6,7 @@ package caregame;
 
 import caregame.entity.*;
 import caregame.field.*;
+import caregame.field.biome.Biome;
 import caregame.item.FurnitureItem;
 import caregame.item.Item;
 import caregame.item.ResourceItem;
@@ -18,6 +19,8 @@ import java.awt.Graphics;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -67,70 +70,49 @@ public class Savegame implements ListItem {
         }
         System.out.println("SAVE TO: " + f.getAbsolutePath());
         out = new DataOutputStream(new FileOutputStream(f));
-        
-        saveHeader();
-        saveInventory();
-        saveField();
-        saveFinish();
-        return true;
-    }
-    public boolean saveHeader() throws IOException {
-        if (out == null) return false;
-        out.writeInt(Game.TILE_SIZE);
-//        out.writeInt(game.cx);
-//        out.writeInt(game.cy);
-//        out.writeBoolean(game.selectedItem != null);
-//        if (game.selectedItem != null) {
-//            game.selectedItem.write(out);
-//        }
+        int numFields = 0;
+        for (int i = 0; i < game.fields.length; i++) {
+            if (game.fields[i] != null) numFields++;
+        }
+        GameField []fields = game.fields;
+        out.writeInt(game.gameTime);
         out.writeByte(game.weather.id);
+        out.writeByte(game.worldName.length());
+        for (int i = 0; i < game.worldName.length(); i++) {
+            out.writeByte(game.worldName.charAt(i));
+        }
+        out.writeShort(fields.length);
+        out.writeShort(numFields);
+        System.out.println("Fields: " + numFields + "/" + fields.length);
+        for (int i = 0; i < fields.length; i++) {
+            GameField field = fields[i];
+            if (field == null) continue;
+            out.writeInt(field.width);
+            out.writeInt(field.height);
+            out.writeInt(field.creatureDensity);
+//            out.writeInt(field.biome);
+            out.writeInt(field.level);
+            out.writeByte(field.weather.id);
+            
+            for (int j = 0; j < field.width * field.height; j++) {
+                out.writeByte(field.field[j]);
+            }
+            for (int j = 0; j < field.width * field.height; j++) {
+                out.writeByte(field.data[j]);
+            }
+            out.writeInt(field.entities.size());
+            for (int j = 0; j < field.entities.size(); j++) {
+                Entity e = field.entities.get(j);
+                e.write(out);
+            }
+        }
+        
+        out.flush();
+        out.close();
         return true;
     }
     
-    public boolean saveField() throws IOException {
-        if (out == null) return false;
-        
-        /*
-         * OPC
-         * dw:width
-         * dw:height
-         * w*h:
-         *  Field.write
-         * dw:entities.size
-         * entities.size:
-         *  Entity.write
-         */
-        out.writeInt(OPCODES.OP_FIELD);
-        out.writeInt(game.field.width);
-        out.writeInt(game.field.height);
-        for (int i = 0; i < game.field.field.length; i++) {
-//            game.field.field[i].write(out);
-        }
-        out.writeInt(game.field.entities.size());
-        for (int i = 0; i < game.field.entities.size(); i++) {
-            game.field.entities.get(i).write(out);
-        }
-        
-        return true;
-    }
-    public boolean saveInventory() throws IOException {
-        if (out == null) return false;
-//        game.inventory.write(out);
-        
-        
-        return true;
-    }
-    
-    public boolean saveFinish() throws IOException {
-        if (out != null) {
-            out.flush();
-            out.close();
-            return true;
-        }
-        return false;
-    }
-    
-    public boolean load(Game game) throws IOException {
+    public boolean load(Game game, InputHandler input) throws IOException {
         this.game = game;
         File f = new File("saves/" + title + ".dat");
         System.out.println("LOAD: " + f.getAbsolutePath());
@@ -139,112 +121,103 @@ public class Savegame implements ListItem {
         }
         in = new DataInputStream(new FileInputStream(f));
         
-        loadHeader();
-        loadInventory();
-        loadField();
-        loadFinish();
-        return true;
-    }
-    
-    public boolean loadFinish() throws IOException {
-        if (in == null) return false;
+        game.gameTime = in.readInt();
+        game.weather = Weather.weathers[in.readByte()];
+        byte []bName = new byte[in.readByte()];
+        for (int i = 0; i < bName.length; i++) {
+            bName[i] = in.readByte();
+        }
+        game.worldName = new String(bName);
+        
+        int fieldsLength = in.readShort();
+        int numFields = in.readShort();
+        
+        game.fields = new GameField[fieldsLength];
+        System.out.println("Fields: " + numFields + "/" + fieldsLength);
+        for (int i = 0; i < numFields; i++) {
+            int w = in.readInt();
+            int h = in.readInt();
+            int creatureDensity = in.readInt();
+//            int biome = in.readInt();
+            int level = in.readInt();
+            Weather weather = Weather.weathers[in.readByte()];
+            GameField field = new GameField(Biome.forest, level, false);
+            game.fields[i] = field;
+            field.creatureDensity = creatureDensity;
+            field.width = w;
+            field.height = h;
+            field.weather = weather;
+            field.field = new byte[w*h];
+            field.data = new byte[w*h];
+            field.entitiesInTiles = new ArrayList[w*h];
+            
+            for (int j = 0; j < w*h; j++) {
+                field.entitiesInTiles[j] = new ArrayList<Entity>();
+            }
+            for (int j = 0; j < w*h; j++) {
+                field.field[j] = in.readByte();
+            }
+            for (int j = 0; j < w*h; j++) {
+                field.data[j] = in.readByte();
+            }
+            int numEntities = in.readInt();
+            for (int j = 0; j < numEntities; j++) {
+                Entity entity = null;
+                boolean deadRead = false;
+                int entityType = in.readInt();
+                System.out.println("Read Entity: " + String.format("%X", entityType));
+                switch (entityType) {
+                    // CREATURES
+                    case OPCODES.OP_ENTITY_PLAYER: entity = new Player(game, input);
+                        break;
+                    case OPCODES.OP_ENTITY_PIG: entity = new Pig();
+                        break;
+                    //ITEM ENTITY
+                    case OPCODES.OP_ENTITY_ITEM_ENTITY: entity = new ItemEntity(null, 0, 0);
+                        break;
+                    // FURNITURE
+                    case OPCODES.OP_ENTITY_BAG: entity = new Bag();
+                        break;
+                    case OPCODES.OP_ENTITY_TORCH: entity = new Torch();
+                        break;
+                    case OPCODES.OP_ENTITY_WORKBENCH: entity = new Workbench();
+                        break;
+                    default: 
+//                        Class clazz = null;
+                        System.out.println("Search alternative class");
+                        for (Class clazz : OPCODES.opcodes.keySet()) {
+                            if (OPCODES.opcodes.get(clazz) == entityType) {
+                                try {
+                                    entity = (Entity) clazz.newInstance();
+                                } catch (InstantiationException ex) {
+                                    deadRead = true;
+                                } catch (IllegalAccessException ex) {
+                                    deadRead = true;
+                                }
+                            }
+                            if (deadRead) break;
+                        }
+                        if (deadRead) {
+                            entity = new Entity();
+                            System.out.println("No class def found!");
+                        }
+                        break;
+                }
+//                if (entity == null) {
+//                    throw new RuntimeException("Entity not readable (null), type: " + entityType + ", " + String.format("%X", entityType));
+//                }
+                if (deadRead)
+                    System.out.println("  DEAD READ");
+                else
+                    System.out.println("ENTITY: " + entity.getClass().getSimpleName());
+                entity.read(in);
+                if (!deadRead) field.add(entity);
+            }
+        }
         in.close();
         return true;
     }
     
-    
-    public boolean loadHeader() throws IOException {
-        Game.TILE_SIZE = in.readInt();
-//        game.cx = in.readInt();
-//        game.cy = in.readInt();
-//        boolean hasSelectedItem = in.readBoolean();
-//        if (hasSelectedItem) {
-//            game.selectedItem = readItem();
-//        }
-        game.weather = Weather.weathers[in.readByte()];
-        System.out.println("LOADED HEADER");
-//        System.out.println(" c: " + game.cx + ", " + game.cy);
-        return true;
-    }
-    
-    public boolean loadInventory() throws IOException {
-        if (in == null) return false;
-        in.readInt();//opc
-//        game.inventory.read(in);
-        return true;
-    }
-        /*
-         * OPC
-         * dw:width
-         * dw:height
-         * w*h:
-         *  Field.write
-         * dw:entities.size
-         * entities.size:
-         *  Entity.write
-         */
-    public boolean loadField() throws IOException {
-        if (in == null) return false;
-        in.readInt(); //opc
-        int w = in.readInt();
-        int h = in.readInt();
-        for (int i = 0; i < game.field.field.length; i++) {
-            Tile t = null;
-            int tileOpc = in.readInt();
-            switch (tileOpc) {
-//                case OPCODES.OP_TILE_FARM: t = new FarmTile(); break;
-//                case OPCODES.OP_TILE_GRASS: t = new GrassTile(); break;
-//                case OPCODES.OP_TILE_SEED: t = new SeedTile(null); break;
-//                case OPCODES.OP_TILE_TREE: t = new TreeTile(); break;
-//                case OPCODES.OP_TILE_WATER: t = new WaterTile(); break;
-//                case OPCODES.OP_TILE_WOOD_PLANKS: t = new WoodPlanksTile(); break;
-//                case OPCODES.OP_TILE_INVISIBLE_WALL: t = new InvisibleWallTile(); break;
-                default:
-                    throw new RuntimeException("ERROR: Unexpected OpCode for TILE: " + tileOpc);
-            }
-//            t.read(in);
-//            game.field.field[i] = t;
-        }
-        int entities = in.readInt();
-        System.out.println("LOAD entities: " + entities);
-        for (int i = 0; i < entities; i++) {
-            Entity e = null;
-            int opc = in.readInt();
-            switch (opc) {
-                case OPCODES.OP_ENTITY_BAG: e = new Bag(); break;
-                case OPCODES.OP_ENTITY_FURNITURE: e = new Furniture(""); break;
-                case OPCODES.OP_ENTITY_WORKBENCH: e = new Workbench(); break;
-//                case OPCODES.OP_ENTITY_PLAYER: e = new Player(game); break;
-                default: continue;
-            }
-            e.read(in);
-            game.field.add(e);
-        }
-        return true; 
-    }
-    
-    private Item readItem() throws IOException {
-        Item item = null;
-        int type = in.readInt();
-        
-        switch (type) {
-            case OPCODES.OP_ITEM_FURNITURE: 
-                item = new FurnitureItem(null);
-                item.read(in);
-                break;
-            case OPCODES.OP_ITEM_RESOURCE:
-                item = new ResourceItem(Resource.wood);
-                item.read(in);
-                break;
-            case OPCODES.OP_ITEM_TOOL:
-                item = new ToolItem(ToolType.hoe, 0);
-                item.read(in);
-                break;
-        }
-        
-        
-        return item;
-    }
 
     @Override
     public void renderInventory(Graphics g, int x, int y) {

@@ -15,6 +15,8 @@ import java.awt.Graphics;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -55,7 +57,6 @@ public class FurnitureItem extends Item{
 
     @Override
     public void write(DataOutputStream out) throws IOException {
-        out.writeInt(OPCODES.OP_ITEM_FURNITURE);
         furniture.write(out);
     }
 
@@ -63,14 +64,27 @@ public class FurnitureItem extends Item{
     public void read(DataInputStream in) throws IOException {
         int opc = in.readInt();
         
-        switch (opc) {
-            case OPCODES.OP_ENTITY_WORKBENCH: furniture = new Workbench(); 
-                break;
-            case OPCODES.OP_ENTITY_BAG: furniture = new Bag();
-                break;
-            default:    
-                throw new RuntimeException("Error reading Furniture Item, expected Furniture opc, " + opc);
+        for (Class clazz : OPCODES.opcodes.keySet()) {
+            if (OPCODES.opcodes.get(clazz) == opc) {
+                try {
+                    furniture = (Furniture) clazz.newInstance();
+                    break;
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(FurnitureItem.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(FurnitureItem.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
+        
+//        switch (opc) {
+//            case OPCODES.OP_ENTITY_WORKBENCH: furniture = new Workbench(); 
+//                break;
+//            case OPCODES.OP_ENTITY_BAG: furniture = new Bag();
+//                break;
+//            default:    
+//                throw new RuntimeException("Error reading Furniture Item, expected Furniture opc, " + opc);
+//        }
         furniture.read(in);
     }
 

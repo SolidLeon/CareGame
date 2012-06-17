@@ -39,15 +39,21 @@ public class GameField {
     
     
     public GameField(Biome biome, int level) {
+        this(biome, level, true);
+    }
+
+    public GameField(Biome biome, int level, boolean createField) {
         this.biome = biome;
         this.level = level;
-        byte [][]map = FieldGen.generateField(width, height, level, biome);
-        field = map[0];
-        data = map[1];
         light = new byte[width*height];
-        entitiesInTiles = new ArrayList[width*height];
-        for (int i = 0; i < entitiesInTiles.length; i++) {
-            entitiesInTiles[i] = new ArrayList<Entity>();
+        if (createField) {
+            byte [][]map = FieldGen.generateField(width, height, level, biome);
+            field = map[0];
+            data = map[1];
+            entitiesInTiles = new ArrayList[width*height];
+            for (int i = 0; i < entitiesInTiles.length; i++) {
+                entitiesInTiles[i] = new ArrayList<Entity>();
+            }
         }
     }
     

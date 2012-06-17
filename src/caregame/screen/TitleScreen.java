@@ -24,22 +24,7 @@ public class TitleScreen extends Screen {
     
     public TitleScreen() {
     }
-
-//    @Override
-//    public void tick() {
-//        if (!isSaved && game != null && game.canResume) {
-//            //save game
-//            Savegame sav = new Savegame(game.worldName);
-//            try {
-//                sav.save(game);
-//            } catch (IOException ex) {
-//                Logger.getLogger(TitleScreen.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//            isSaved = true;
-//        }
-//    }
-    
-    
+  
     
     @Override
     public void render(Graphics g) {
@@ -58,6 +43,18 @@ public class TitleScreen extends Screen {
 
     @Override
     public void tick() {
+        
+        if (!isSaved && game != null && game.canResume) {
+            //save game
+            Savegame sav = new Savegame(game.worldName);
+            try {
+                sav.save(game);
+            } catch (IOException ex) {
+                Logger.getLogger(TitleScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            isSaved = true;
+        }
+        
         if (input.up.clicked) selection--;
         if (input.down.clicked) selection++;
         

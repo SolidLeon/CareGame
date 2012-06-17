@@ -5,11 +5,11 @@
 package caregame.entity;
 
 import caregame.Game;
+import caregame.OPCODES;
 import caregame.field.GameField;
 import caregame.field.Tile;
 import caregame.item.Item;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -118,6 +118,7 @@ public class Entity {
     }
     
     public void write(DataOutputStream out) throws IOException {
+        out.writeInt(OPCODES.opcodes.get(getClass()));
         out.writeInt(x);
         out.writeInt(y);
     }

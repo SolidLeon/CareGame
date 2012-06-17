@@ -57,7 +57,6 @@ public class ResourceItem extends Item {
 
     @Override
     public void write(DataOutputStream out) throws IOException {
-        out.writeInt(OPCODES.OP_ITEM_RESOURCE);//item type - resource item
         out.writeByte(resource.id);
         out.writeInt(count);
     }

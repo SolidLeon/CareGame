@@ -58,15 +58,16 @@ public class ToolItem extends Item {
 
     @Override
     public void write(DataOutputStream out) throws IOException {
-        out.writeInt(OPCODES.OP_ITEM_TOOL);
         out.writeByte(type.id);
         out.writeByte(level);
+        out.writeByte(durability);
     }
 
     @Override
     public void read(DataInputStream in) throws IOException {
         type = ToolType.types[in.readByte()];
         level = in.readByte();
+        durability = in.readByte();
     }
 
     @Override

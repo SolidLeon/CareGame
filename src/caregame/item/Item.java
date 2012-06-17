@@ -49,7 +49,7 @@ public class Item implements ListItem {
     }
     
     public void write(DataOutputStream out) throws IOException {
-        out.writeInt(OPCODES.OP_ITEM);
+        out.writeInt(OPCODES.opcodes.get(getClass()));
     }
     
     public void read(DataInputStream in) throws IOException {

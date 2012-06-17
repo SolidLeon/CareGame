@@ -16,6 +16,7 @@ import caregame.screen.InventoryScreen;
 import caregame.screen.TitleScreen;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -149,8 +150,20 @@ public class Player extends Creature {
 
     @Override
     public void write(DataOutputStream out) throws IOException {
-        out.writeInt(OPCODES.OP_ENTITY_PLAYER);
+        super.write(out);
+        out.writeInt(hunger);
+        inventory.write(out);
     }
+
+    @Override
+    public void read(DataInputStream in) throws IOException {
+        super.read(in);
+        hunger = in.readInt();
+        inventory = new Inventory();
+        inventory.read(in);
+    }
+    
+    
 
     @Override
     public boolean findStartPos(GameField field) {
@@ -258,6 +271,7 @@ public class Player extends Creature {
         if (attackTime > 0) attackTime--;
         
         if (input.escape.clicked) {
+            game.canResume = true;
             game.setScreen(new TitleScreen());
         }
     }

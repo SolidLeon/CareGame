@@ -21,6 +21,7 @@ public class DeadScreen extends Screen {
     @Override
     public void tick() {
         if (input.attack.clicked || input.menu.clicked) {
+            game.canResume = false;
             game.setScreen(new TitleScreen());
         }
     }

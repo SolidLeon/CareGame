@@ -35,21 +35,17 @@ public class Bag extends Furniture {
 
     @Override
     public void write(DataOutputStream out) throws IOException {
-        out.writeInt(OPCODES.OP_ENTITY_BAG);
-        super.write(out); //x,y,name
+        super.write(out);
         inventory.write(out);
     }
 
     @Override
     public void read(DataInputStream in) throws IOException {
         super.read(in);
-        int opc = in.readInt();
-        if (opc != OPCODES.OP_INVENTORY) {
-            throw new RuntimeException("Error reading bag: Expected inventory opc, " + opc);
-        }
         inventory = new Inventory();
         inventory.read(in);
     }
+    
     
     
     

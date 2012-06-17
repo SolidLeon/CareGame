@@ -74,13 +74,16 @@ public class Furniture extends Entity{
     public void write(DataOutputStream out) throws IOException {
 //        out.writeInt(OPCODES.OP_ENTITY_FURNITURE);
         super.write(out); //x,y
-        out.writeUTF(name);
+        out.writeInt(name.length());
+        out.writeBytes(name);
     }
 
     @Override
     public void read(DataInputStream in) throws IOException {
         super.read(in);
-        name = in.readUTF();
+        byte []bName = new byte[in.readInt()];
+        in.read(bName);
+        name = new String(bName);
     }
 
     @Override
