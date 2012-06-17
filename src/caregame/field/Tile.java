@@ -39,6 +39,7 @@ public class Tile {
     public static final Tile wheatSeed = new SeedTile(13, farmland, wheat);
     public static final Tile elevatorUpTile = new ElevatorTile(14, false);
     public static final Tile elevatorDownTile = new ElevatorTile(15, true);
+    public static final Tile wood = new WoodTile(16);
     
     protected Random random = new Random();
     public final byte id;

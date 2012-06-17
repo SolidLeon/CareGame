@@ -15,7 +15,7 @@ import caregame.field.Tile;
 public class Resource {
     
     public final static Resource[] resources = new Resource[256];
-    public static final Resource wood = new Resource(0, "WOOD", "holz.png");
+    public static final Resource wood = new PlaceableResource(0, "WOOD", "holz.png", Tile.wood, Tile.grass);
     public static final Resource fertilizer = new Resource(1, "FERTILIZER");
     public final static Resource treeSapling = new PlantableResource(2, "TREE SAPLING", "baum.png", Tile.treeSapling, Tile.grass);
     public final static Resource pineSapling = new PlantableResource(3, "PINE SAPLING", "tanne.png", Tile.pineSapling, Tile.grass);
