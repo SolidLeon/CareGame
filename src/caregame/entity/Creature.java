@@ -5,6 +5,7 @@
 package caregame.entity;
 
 import caregame.entity.particle.TextParticle;
+import caregame.field.GameField;
 
 /**
  *
@@ -23,16 +24,19 @@ public class Creature extends Entity {
     public int walkDist = 0;
     private int xKnockback;
     private int yKnockback;
+    public int hurtTime = 0;
     
     @Override
     public void tick() {
         tickTime++;
         if (health <= 0) {
-            remove();
+            die();
         }
     }
     
-    
+    protected void die() {
+        remove();
+    }
 
     @Override
     public boolean move(int xa, int ya) {
@@ -66,6 +70,7 @@ public class Creature extends Entity {
     }
     
     public void heal(int heal) {
+        if (hurtTime > 0) return;
         field.add(new TextParticle("H" + Integer.toString(heal), x, y));
         health += heal;
         if (health > maxHealth) health = maxHealth;
@@ -75,6 +80,52 @@ public class Creature extends Entity {
     public boolean blocks(Entity e) {
         return e.isBlockableBy(this);
     }
+
+    @Override
+    public void hurt(Creature c, int dmg, int attackDir) {
+        doHurt(dmg, attackDir);
+    }
     
+    protected void doHurt(int dmg, int attackDir) {
+        if (hurtTime > 0) return;
+        
+        if (field.player != null) {
+            int xd = field.player.x  - x;
+            int yd = field.player.y  - y;
+            if (xd * xd + yd*yd < 80*80) {
+//                Sound.creatureHurt.play();
+            }
+        }
+        field.add(
+                new TextParticle("" + dmg, x, y));
+        health -= dmg;
+        if (attackDir == DIR_SOUTH) yKnockback = +6;
+        if (attackDir == DIR_NORTH) yKnockback = -6;
+        if (attackDir == DIR_WEST) xKnockback = -6;
+        if (attackDir == DIR_EAST) xKnockback = +6;
+        hurtTime = 10;
+    }
+    
+    public boolean findStartPos(GameField field) {
+        int x = random.nextInt(field.width);
+        int y = random.nextInt(field.height);
+        int xx = x * 32 + 16;
+        int yy = y * 32 + 16;
+        
+        if (field.player != null) {
+            int xd = field.player.x - xx;
+            int yd = field.player.y - yy;
+            if (xd*xd + yd*yd < 80*80) return false;
+        }
+        int r = field.creatureDensity * 32;
+        if (field.getEntities(xx-r, yy-r, xx+r, yy+r).size() > 0) return false;
+        
+        if (field.getTile(x, y).mayPass(field, x, y, this)) {
+            this.x = xx;
+            this.y = yy;
+            return true;
+        }
+        return false;
+    }
     
 }

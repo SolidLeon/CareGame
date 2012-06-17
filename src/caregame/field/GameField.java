@@ -5,7 +5,9 @@
 package caregame.field;
 
 import caregame.Game;
+import caregame.entity.Creature;
 import caregame.entity.Entity;
+import caregame.entity.Pig;
 import caregame.entity.Player;
 import caregame.field.biome.Biome;
 import caregame.field.fieldgen.FieldGen;
@@ -33,6 +35,7 @@ public class GameField {
     public int level;
     public Biome biome;
     public Weather weather = Weather.sunny;
+    public int creatureDensity = 8;
     
     
     public GameField(Biome biome, int level) {
@@ -45,6 +48,17 @@ public class GameField {
         entitiesInTiles = new ArrayList[width*height];
         for (int i = 0; i < entitiesInTiles.length; i++) {
             entitiesInTiles[i] = new ArrayList<Entity>();
+        }
+    }
+    
+    public void trySpawn(int count) {
+        for (int i = 0; i < count; i++) {
+            Creature creature;
+            
+            creature = new Pig();
+            if (creature.findStartPos(this)) {
+                this.add(creature);
+            }
         }
     }
     
@@ -104,6 +118,7 @@ public class GameField {
     }
     
     public void tick() {
+        trySpawn(1);
 //        ticks++;
 //        if (ticks % 60 == 0) gameTime++;
 //        if (gameTime > 8*60) gameTime = 0;

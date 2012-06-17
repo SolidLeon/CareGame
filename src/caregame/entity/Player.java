@@ -130,6 +130,7 @@ public class Player extends Creature {
         out.writeInt(OPCODES.OP_ENTITY_PLAYER);
     }
 
+    @Override
     public boolean findStartPos(GameField field) {
         for(;;) {
             int xt = random.nextInt(field.width);
