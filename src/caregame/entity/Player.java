@@ -110,21 +110,21 @@ public class Player extends Creature {
         //draw hitbox
         if (Game.DEBUG) {
             //range
+            int yo2 = -4;
 //            if (dir == DIR_WEST) xt = (x - xr - range) >> 5;
 //            if (dir == DIR_EAST) xt = (x + xr + range) >> 5;
 //            if (dir == DIR_SOUTH) yt = (y + yr + range) >> 5;
 //            if (dir == DIR_NORTH) yt = (y - yr - range) >> 5;
-            int yo2 = -yr;
-            g.setColor(Color.blue);
+//            g.setColor(Color.blue);
             if (dir == DIR_WEST)g.drawLine(x - xr - interactRange, y+yo2, x, y+yo2);
             if (dir == DIR_EAST)g.drawLine(x, y+yo2, x + xr + interactRange, y+yo2);
             if (dir == DIR_SOUTH)g.drawLine(x, y+yo2, x, y + yr + interactRange+yo2);
             if (dir == DIR_NORTH)g.drawLine(x, y+yo2 - yr - interactRange, x, y+yo2);
             g.setColor(Color.red);
-            if (dir == DIR_WEST)g.drawLine(x - xr - attackRange, y, x, y);
-            if (dir == DIR_EAST)g.drawLine(x, y, x + xr + attackRange, y);
-            if (dir == DIR_SOUTH)g.drawLine(x, y, x, y + yr + attackRange);
-            if (dir == DIR_NORTH)g.drawLine(x, y - yr - attackRange, x, y);
+//            if (dir == DIR_WEST)g.drawLine(x - xr - attackRange, y, x, y);
+//            if (dir == DIR_EAST)g.drawLine(x, y, x + xr + attackRange, y);
+//            if (dir == DIR_SOUTH)g.drawLine(x, y, x, y + yr + attackRange);
+//            if (dir == DIR_NORTH)g.drawLine(x, y - yr - attackRange, x, y);
             
             //move box
             g.setColor(Color.black);
@@ -279,8 +279,8 @@ public class Player extends Creature {
     private void attack() {
         attackDir = dir;
         attackItem = activeItem;
-        int yo = -yr;
         boolean done = false;
+        int yo = -4;
         if (activeItem != null) {
             attackTime = 10;
 //            int interactRange = 8;
@@ -288,7 +288,7 @@ public class Player extends Creature {
             System.out.println("Interact with entities...");
             if (dir == DIR_WEST && interact(x - xr - interactRange, y+yo, x - xr, y+yo)) done = true; 
             if (dir == DIR_EAST && interact(x + xr, y+yo, x + xr + interactRange, y+yo)) done = true; 
-            if (dir == DIR_SOUTH && interact(x, y+yr+yo, x, y + yr + interactRange)) done = true; 
+            if (dir == DIR_SOUTH && interact(x, y+yr+yo, x, y + yr + interactRange+yo)) done = true; 
             if (dir == DIR_NORTH && interact(x, y-yr-interactRange+yo, x, y - yr+yo)) done = true; 
             if(done) return;
 

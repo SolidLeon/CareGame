@@ -9,6 +9,7 @@ import caregame.entity.Entity;
 import caregame.entity.Player;
 import caregame.field.GameField;
 import caregame.field.biome.Biome;
+import caregame.field.fieldgen.FieldGen;
 import caregame.item.*;
 import caregame.item.resource.Resource;
 import caregame.screen.DeadScreen;
@@ -138,6 +139,7 @@ public class Game extends Canvas implements Runnable {
         startNewGame(worldName, false);
     }
     public void startNewGame(String worldName, boolean cheatMode) {
+        FieldGen.initRandom(worldName.hashCode());
         gameTime = random.nextInt(57600);
         this.worldName = worldName;
         currentLevel = 255;

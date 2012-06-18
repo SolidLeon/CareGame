@@ -24,6 +24,10 @@ public class FieldGen extends Canvas implements Runnable, KeyListener {
     private static PerlinNoise pn = new PerlinNoise(0x1000, 0);
     private static Random random = new Random(0);
     
+    public static void initRandom(long seed) {
+        random = new Random(seed);
+    }
+    
     public static byte[][] generateField(int sx, int sy, int level, Biome biome) {
         byte []map = new byte[sx*sy];
         byte []data = new byte[sx*sy];

@@ -49,7 +49,7 @@ public class EnterWorldnameScreen extends Screen {
     public void tick() {
         ticks++;
         if (ticks % 30 == 0) showCaret = !showCaret;
-        if (input.enter.clicked) {
+        if (input.enter.clicked && name.length() > 0) {
             input.setTextInputEnabled(false);
             if (name.equalsIgnoreCase("ponyland")) {
                 game.startNewGame(name, true);

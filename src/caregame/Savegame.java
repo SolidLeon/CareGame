@@ -7,6 +7,7 @@ package caregame;
 import caregame.entity.*;
 import caregame.field.*;
 import caregame.field.biome.Biome;
+import caregame.field.fieldgen.FieldGen;
 import caregame.item.FurnitureItem;
 import caregame.item.Item;
 import caregame.item.ResourceItem;
@@ -128,7 +129,7 @@ public class Savegame implements ListItem {
             bName[i] = in.readByte();
         }
         game.worldName = new String(bName);
-        
+        FieldGen.initRandom(game.worldName.hashCode());
         int fieldsLength = in.readShort();
         int numFields = in.readShort();
         
