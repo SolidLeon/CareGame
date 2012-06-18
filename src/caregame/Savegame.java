@@ -82,6 +82,7 @@ public class Savegame implements ListItem {
         for (int i = 0; i < game.worldName.length(); i++) {
             out.writeByte(game.worldName.charAt(i));
         }
+        out.writeInt(game.currentLevel);
         out.writeShort(fields.length);
         out.writeShort(numFields);
         System.out.println("Fields: " + numFields + "/" + fields.length);
@@ -121,7 +122,9 @@ public class Savegame implements ListItem {
             return false;
         }
         in = new DataInputStream(new FileInputStream(f));
-        
+        System.out.println("LOAD GAME");
+        System.out.println("  " + title
+                );
         game.gameTime = in.readInt();
         game.weather = Weather.weathers[in.readByte()];
         byte []bName = new byte[in.readByte()];
@@ -130,9 +133,14 @@ public class Savegame implements ListItem {
         }
         game.worldName = new String(bName);
         FieldGen.initRandom(game.worldName.hashCode());
+        
+        int currentLevel = in.readInt();
         int fieldsLength = in.readShort();
         int numFields = in.readShort();
         
+        System.out.println("Current Level: " + currentLevel);
+        
+        game.currentLevel = currentLevel;
         game.fields = new GameField[fieldsLength];
         System.out.println("Fields: " + numFields + "/" + fieldsLength);
         for (int i = 0; i < numFields; i++) {
@@ -143,7 +151,7 @@ public class Savegame implements ListItem {
             int level = in.readInt();
             Weather weather = Weather.weathers[in.readByte()];
             GameField field = new GameField(Biome.forest, level, false);
-            game.fields[i] = field;
+            game.fields[level] = field;
             field.creatureDensity = creatureDensity;
             field.width = w;
             field.height = h;
@@ -189,6 +197,7 @@ public class Savegame implements ListItem {
                         for (Class clazz : OPCODES.opcodes.keySet()) {
                             if (OPCODES.opcodes.get(clazz) == entityType) {
                                 try {
+                                    System.out.println("Class: " + clazz.getSimpleName());
                                     entity = (Entity) clazz.newInstance();
                                 } catch (InstantiationException ex) {
                                     deadRead = true;
@@ -196,25 +205,33 @@ public class Savegame implements ListItem {
                                     deadRead = true;
                                 }
                             }
-                            if (deadRead) break;
-                        }
-                        if (deadRead) {
-                            entity = new Entity();
-                            System.out.println("No class def found!");
+                            if (deadRead) {
+                                break;
+                            }
                         }
                         break;
                 }
-//                if (entity == null) {
-//                    throw new RuntimeException("Entity not readable (null), type: " + entityType + ", " + String.format("%X", entityType));
-//                }
+                if (entity == null) {
+                    entity = new Entity();
+                    System.out.println("No class def found!");
+                }
                 if (deadRead)
                     System.out.println("  DEAD READ");
-                else
-                    System.out.println("ENTITY: " + entity.getClass().getSimpleName());
                 entity.read(in);
-                if (!deadRead) field.add(entity);
+                if (!deadRead) {
+                    if (entity instanceof Player) {
+                        System.out.println("PLAYER ADDED");
+                        System.out.println("  " + entity.x);
+                        System.out.println("  " + entity.y);
+                        System.out.println("  " + (entity.x>>5));
+                        System.out.println("  " + (entity.y>>5));
+                        game.player = (Player) entity;
+                    }
+                    field.add(entity);
+                }
             }
         }
+        game.field = game.fields[currentLevel];
         in.close();
         return true;
     }

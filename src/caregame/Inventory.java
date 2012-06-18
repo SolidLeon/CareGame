@@ -134,14 +134,17 @@ public class Inventory {
                 FurnitureItem fi = new FurnitureItem(null);
                 fi.read(in);
                 add(0, fi);
+                System.out.println("READ FURNITURE ITEM");
             } else if (type == OPCODES.OP_ITEM_RESOURCE) {
                 ResourceItem ri = new ResourceItem(Resource.wood);
                 ri.read(in);
                 add(0, ri);
+                System.out.println("READ RESORUCE ITEM");
             } else if (type == OPCODES.OP_ITEM_TOOL) {
                 ToolItem ti = new ToolItem(ToolType.hoe, 0);
                 ti.read(in);
                 add(0, ti);
+                System.out.println("READ TOOL ITEM");
             }
         }
     }

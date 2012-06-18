@@ -52,8 +52,8 @@ public class LoadScreen extends Screen {
         
         if (input.attack.clicked && len > 0) {
             try {
-                game.startLoadedGame(saves.get(selection).title);
                 saves.get(selection).load(game, input);
+                game.startLoadedGame(saves.get(selection).title);
                 game.setScreen(null);
             } catch (IOException ex) {
                 Logger.getLogger(LoadScreen.class.getName()).log(Level.SEVERE, null, ex);

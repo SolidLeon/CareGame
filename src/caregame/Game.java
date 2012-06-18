@@ -87,7 +87,7 @@ public class Game extends Canvas implements Runnable {
     
     public InputHandler input = new InputHandler(this);
     
-    private int currentLevel;
+    public int currentLevel;
     private int pendingLevelChange;
     
     private byte []ll = { 0, 2, 4, 6, 8, 12, 14, 15, 15, 14, 12, 8, 6, 4, 2, 0 };
@@ -126,12 +126,6 @@ public class Game extends Canvas implements Runnable {
     /** only prepare variables to get filled */
     public void startLoadedGame(String worldName) {
         this.worldName = worldName;
-//        field = new GameField();
-//        cx = 0;
-//        cy = 0;
-        player = new Player(this, input);
-//        selectedItem = null;
-        weather = Weather.getRandomWeather();
         canResume = false;
     }
     
